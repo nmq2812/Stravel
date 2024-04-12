@@ -50,11 +50,12 @@ fun AppNavigation() {
             ) {
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentDestination = navBackStackEntry?.destination
-                val condition =
+
 
                 listOfNavItems.forEach {NavItem ->
+                    val condition = currentDestination?.hierarchy?.any {it.route == NavItem.route} == true
                     NavigationBarItem(
-                        selected = currentDestination?.hierarchy?.any {it.route == NavItem.route} == true,
+                        selected = condition,
                         onClick = {
                                   navController.navigate(NavItem.route) {
                                       popUpTo(navController.graph.findStartDestination().id) {
@@ -64,7 +65,13 @@ fun AppNavigation() {
                                       restoreState = true
                                   }
                         },
-                        icon = { Icon(painter = painterResource(id = NavItem.iconNotSelected), contentDescription = null)}
+                        icon = {
+                            if (condition) {
+                                Icon(painter = painterResource(id = NavItem.iconSelected), contentDescription = null)
+                            } else {
+                                Icon(painter = painterResource(id = NavItem.iconNotSelected), contentDescription = null)
+                            }
+                        }
                     )
                 }
             }
