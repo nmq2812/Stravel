@@ -14,8 +14,10 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-       setContent { 
-           Greeting(name = "Stravel")
+       setContent {
+           StravelTheme {
+               Greeting("Android")
+           }
        }
     }
 }
