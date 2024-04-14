@@ -10,8 +10,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -41,12 +41,11 @@ fun AppNavigation() {
     }
 
     Scaffold (
-        //modifier = Modifier.background(color = Color.Blue),
+        modifier = Modifier.padding(16.dp),
         bottomBar = {
             NavigationBar(modifier = Modifier
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(50.dp, 50.dp, 50.dp, 50.dp))
-                .shadow(elevation = 100.dp, shape = RoundedCornerShape(10.dp))
+                .shadow(elevation = 1.dp, shape = RoundedCornerShape(100.dp), spotColor = Color.Transparent)
             ) {
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentDestination = navBackStackEntry?.destination
