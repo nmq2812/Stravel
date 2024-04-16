@@ -10,10 +10,8 @@ import com.example.stravel.components.AppNavigation
 import com.example.stravel.ui.theme.StravelTheme
 
 class MainActivity : ComponentActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
        setContent {
            StravelTheme {
                Greeting("Android")
