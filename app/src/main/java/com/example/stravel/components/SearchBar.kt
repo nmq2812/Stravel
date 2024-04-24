@@ -32,7 +32,7 @@ fun SearchBar() {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(color = Color.Transparent)
+            .shadow(elevation = 3.dp, shape = RoundedCornerShape(100.dp), spotColor = Color.Gray),
     ) {
         Icon(
             painter = painterResource(id = R.drawable.search_24),
