@@ -14,5 +14,6 @@ fun FavouriteScreen() {
         ,contentAlignment = Alignment.Center
     ) {
         Text(text = "Favourite page")
+        FavouriteScreen()
     }
 }

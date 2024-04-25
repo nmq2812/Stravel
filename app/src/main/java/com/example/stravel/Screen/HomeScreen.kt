@@ -30,18 +30,13 @@ fun HomeScreen() {
         ) {
             Column() {
                 Text(
-                    "Explore",
-                    style = TextStyle(fontSize = 16.sp),
-                    modifier = Modifier
-                        .padding(start = 16.dp)
-                )
-                Text(
                     "STRAVEL",
                     style = TextStyle(fontSize = 48.sp),
                     modifier = Modifier
-                        .padding(16.dp)
+                        .padding(8.dp)
                 )
             }
+
             Spacer(modifier = Modifier.height(16.dp))
 
             Box(modifier = Modifier.fillMaxWidth()) {

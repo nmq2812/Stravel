@@ -7,8 +7,14 @@ data class PlaceItem(
     val id: Int,
     val image: Int,
     val description: String,
-    val score: Int
+    val score: Int,
+    var favou: Boolean
 )
+
+fun setFavou(Item: PlaceItem) {
+    Item.favou = !Item.favou
+}
+
 val listOfPlaceItems = listOf(
     PlaceItem(
         name = "Nhà thờ lớn",
@@ -20,6 +26,7 @@ val listOfPlaceItems = listOf(
                 "\n" +
                 "Ngoài tính chất tôn giáo, những nhà thờ lớn còn là điểm đến văn hóa và du lịch quan trọng. Với kiến trúc đặc biệt, những nơi này thu hút rất nhiều du khách đến tham quan, khám phá và chiêm ngưỡng. Đồng thời, chúng cũng là nơi tôn vinh và bảo tồn di sản văn hóa của Việt Nam.",
         score = 4,
+        favou = true
     ),
     PlaceItem(
         name = "Chùa một cột",
@@ -31,6 +38,8 @@ val listOfPlaceItems = listOf(
                 "\n" +
                 "Đến ngày nay, Chùa Một Cột vẫn thu hút đông đảo du khách cả trong và ngoài nước bởi vẻ đẹp yên bình, nét kiến trúc độc đáo và giá trị văn hóa lịch sử sâu sắc. Đây là một điểm đến không thể bỏ qua khi khám phá văn hóa và lịch sử của thủ đô Hà Nội cùng với những chứng tích của đất nước Việt Nam.",
         score = 4,
+        favou = false
+
     ),
     PlaceItem(
         name = "Văn Miếu - Quốc Tử Giám",
@@ -44,6 +53,8 @@ val listOfPlaceItems = listOf(
                 "\n" +
                 "Văn Miếu Quốc Tử Giám không chỉ là một điểm tham quan lịch sử quan trọng mà còn là biểu tượng của truyền thống học văn và tinh thần học thuật của người Việt Nam.",
         score = 4,
+        favou = false
+
     ),
     PlaceItem(
         name = "Hồ Gươm",
@@ -55,6 +66,8 @@ val listOfPlaceItems = listOf(
                 "\n" +
                 "Ngoài vai trò lịch sử, Hồ Gươm còn là trung tâm của cuộc sống văn hóa và du lịch tại Hà Nội. Với bờ hồ rộng lớn, cây cỏ xanh mát và kiến trúc xung quanh pha trộn giữa cổ điển và hiện đại, hồ thu hút hàng triệu du khách mỗi năm đến thăm quan và thưởng ngoạn vẻ đẹp tinh tế của nó. Đây cũng là nơi diễn ra nhiều hoạt động văn hóa, lễ hội truyền thống và sự kiện quan trọng của thủ đô Hà Nội.",
         score = 4,
+        favou = false
+
     ),
     PlaceItem(
         name = "Lăng Chủ Tịch Hồ Chí Minh",
@@ -68,6 +81,8 @@ val listOfPlaceItems = listOf(
                 "\n" +
                 "Ngoài vai trò là một địa điểm tưởng niệm, Lăng Chủ tịch Hồ Chí Minh còn là biểu tượng của lòng kính trọng và tôn trọng sâu sắc của nhân dân Việt Nam dành cho người đại diện lớn lao của họ.",
         score = 4,
+        favou = false
+
     ),
     PlaceItem(
         name = "Hoàng Thành Thăng Long",
@@ -79,5 +94,6 @@ val listOfPlaceItems = listOf(
                 "\n" +
                 "Với kiến trúc hùng vĩ và sự phức tạp trong cách bố trí các công trình, Hoàng thành Thăng Long là một điểm đến thu hút không chỉ người dân Việt Nam mà còn khách du lịch quốc tế. Năm 2010, nó đã được UNESCO công nhận là Di sản Văn hóa Thế giới, vinh danh giá trị lịch sử và văn hóa của Việt Nam trên trường quốc tế.",
         score = 4,
+        favou = false
     ),
 )

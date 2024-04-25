@@ -1,19 +1,23 @@
 package com.example.stravel.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -51,19 +55,33 @@ fun GridItem(it: PlaceItem) {
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .padding(8.dp)
     ) {
         Image(
             painter = painterResource(id = it.image),
             contentDescription = it.name,
             modifier = Modifier
-                .fillMaxSize()
-                .size(width = 170.dp, height = 100.dp)
+                .fillMaxWidth()
+                //.size(width = 150.dp, height = 150.dp)
+                .clip(shape = RoundedCornerShape(18.dp))
                 .align(Alignment.CenterHorizontally)
+                .background(
+                    brush = Brush.verticalGradient(
+                        colors = listOf(
+                            Color.Transparent, // Màu trong suốt ở đầu
+                            Color.Black // Màu đen ở cuối
+                        ),
+                        startY = 0f,
+                        endY = 0.5f // Thay đổi giá trị endY để điều chỉnh bóng đậm dần
+                    )
+                )
         )
         Text(
             it.name,
             textAlign = TextAlign.Center,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.CenterHorizontally)
         )
     }
 

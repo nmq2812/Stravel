@@ -43,7 +43,7 @@ fun AppNavigation() {
     }
 
     Scaffold (
-        modifier = Modifier.padding(16.dp),
+        modifier = Modifier.padding(8.dp),
         bottomBar = {
             val mainColor = Color(0xFF176FF2)
             NavigationBar(
