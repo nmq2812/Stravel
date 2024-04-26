@@ -38,7 +38,7 @@ val listOfPlaceItems = listOf(
                 "\n" +
                 "Đến ngày nay, Chùa Một Cột vẫn thu hút đông đảo du khách cả trong và ngoài nước bởi vẻ đẹp yên bình, nét kiến trúc độc đáo và giá trị văn hóa lịch sử sâu sắc. Đây là một điểm đến không thể bỏ qua khi khám phá văn hóa và lịch sử của thủ đô Hà Nội cùng với những chứng tích của đất nước Việt Nam.",
         score = 4,
-        favou = false
+        favou = true
 
     ),
     PlaceItem(
@@ -53,7 +53,7 @@ val listOfPlaceItems = listOf(
                 "\n" +
                 "Văn Miếu Quốc Tử Giám không chỉ là một điểm tham quan lịch sử quan trọng mà còn là biểu tượng của truyền thống học văn và tinh thần học thuật của người Việt Nam.",
         score = 4,
-        favou = false
+        favou = true
 
     ),
     PlaceItem(
@@ -66,7 +66,7 @@ val listOfPlaceItems = listOf(
                 "\n" +
                 "Ngoài vai trò lịch sử, Hồ Gươm còn là trung tâm của cuộc sống văn hóa và du lịch tại Hà Nội. Với bờ hồ rộng lớn, cây cỏ xanh mát và kiến trúc xung quanh pha trộn giữa cổ điển và hiện đại, hồ thu hút hàng triệu du khách mỗi năm đến thăm quan và thưởng ngoạn vẻ đẹp tinh tế của nó. Đây cũng là nơi diễn ra nhiều hoạt động văn hóa, lễ hội truyền thống và sự kiện quan trọng của thủ đô Hà Nội.",
         score = 4,
-        favou = false
+        favou = true
 
     ),
     PlaceItem(
@@ -81,7 +81,7 @@ val listOfPlaceItems = listOf(
                 "\n" +
                 "Ngoài vai trò là một địa điểm tưởng niệm, Lăng Chủ tịch Hồ Chí Minh còn là biểu tượng của lòng kính trọng và tôn trọng sâu sắc của nhân dân Việt Nam dành cho người đại diện lớn lao của họ.",
         score = 4,
-        favou = false
+        favou = true
 
     ),
     PlaceItem(

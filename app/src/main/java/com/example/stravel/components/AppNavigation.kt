@@ -15,33 +15,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
-import androidx.navigation.createGraph
-import com.example.stravel.Screen.FavouriteScreen
-import com.example.stravel.Screen.HomeScreen
-import com.example.stravel.Screen.Screens
-import com.example.stravel.Screen.SettingScreen
 
 @Composable
-fun AppNavigation() {
-    val navController = rememberNavController()
-    val myGraph = navController.createGraph(
-        startDestination = Screens.HomeScreen.name, // ID của điểm đến bắt đầu
-        //route = Screens.HomeScreen.name // Tuyến đường của NavGraph
-    ) {
-        // Thêm các điểm đến vào NavGraph
-        composable(Screens.HomeScreen.name) { HomeScreen() }
-        composable(Screens.FavouriteScreen.name) { FavouriteScreen() }
-        composable(Screens.SettingScreen.name) { SettingScreen() }
-    }
-
+fun AppNavigation(navController: NavHostController, myGraph: NavGraph) {
     Scaffold (
         modifier = Modifier.padding(8.dp),
         bottomBar = {
@@ -50,7 +33,7 @@ fun AppNavigation() {
                 containerColor = Color.Transparent,
                 modifier = Modifier
                     .fillMaxWidth()
-                    //.background(mainColor)
+                    .background(Color.Transparent)
                     .padding(bottom = 8.dp)
                     .shadow(elevation = 3.dp, shape = RoundedCornerShape(100.dp), spotColor = mainColor),
                     content = {
@@ -101,10 +84,4 @@ fun AppNavigation() {
                 .padding(paddingValues)
         )
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun AppNavPreview() {
-    AppNavigation()
 }
