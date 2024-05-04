@@ -23,6 +23,6 @@ val listOfNavItems = listOf(
     NavItems(
         iconSelected = R.drawable.user_24,
         iconNotSelected = R.drawable.user_24_outline,
-        route = Screens.SettingScreen.name
+        route = Screens.AccountScreen.name
     )
 )

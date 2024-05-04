@@ -10,6 +10,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.createGraph
 import androidx.navigation.navArgument
+import com.example.stravel.Screen.AccountScreen
 import com.example.stravel.Screen.DetailScreen
 import com.example.stravel.Screen.FavouriteScreen
 import com.example.stravel.Screen.HomeScreen
@@ -41,6 +42,7 @@ fun Greeting() {
         composable(Screens.HomeScreen.name) { HomeScreen(navController) }
         composable(Screens.FavouriteScreen.name) { FavouriteScreen(navController) }
         composable(Screens.SettingScreen.name) { SettingScreen(navController) }
+        composable(Screens.AccountScreen.name) { AccountScreen(navController) }
         composable(Screens.LoginScreen.name) { LoginScreen() }
         composable(
             route = Screens.DetailScreen.name + "/{placeId}",

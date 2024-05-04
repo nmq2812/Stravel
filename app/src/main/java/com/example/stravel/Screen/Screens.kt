@@ -4,6 +4,7 @@ enum class Screens {
     HomeScreen,
     FavouriteScreen,
     SettingScreen,
+    AccountScreen,
     DetailScreen,
     LoginScreen
 }
