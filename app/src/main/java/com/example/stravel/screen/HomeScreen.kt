@@ -16,6 +16,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -37,6 +38,7 @@ fun HomeScreen(navController: NavHostController) {
                 Text(
                     "STRAVEL",
                     style = TextStyle(fontSize = 48.sp),
+                    fontWeight = FontWeight.Bold,
                     modifier = Modifier
                         .padding(8.dp)
                 )
