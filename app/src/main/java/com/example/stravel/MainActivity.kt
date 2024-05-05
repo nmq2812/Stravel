@@ -8,15 +8,20 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.stravel.components.AppNavigation
 import com.example.stravel.screen.LoginScreen
 import com.example.stravel.screen.RegisterScreen
-import com.example.stravel.components.AppNavigation
 import com.example.stravel.ui.theme.StravelTheme
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
+private lateinit var auth: FirebaseAuth
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            auth = Firebase.auth
            StravelTheme {
                Greeting()
            }
@@ -29,8 +34,8 @@ fun Greeting() {
     val mainController = rememberNavController()
     NavHost(mainController,"main") {
         composable("main") {AppNavigation(mainController)}
-        composable("login") { LoginScreen(mainController)}
-        composable("register") {RegisterScreen(mainController)}
+        composable("login") { LoginScreen(mainController, auth)}
+        composable("register") {RegisterScreen(mainController, auth)}
     }
 
 }

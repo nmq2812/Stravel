@@ -8,14 +8,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.stravel.components.LoginContent
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
-fun LoginScreen(mainController: NavHostController) {
+fun LoginScreen(mainController: NavHostController, auth: FirebaseAuth) {
     Box(
         modifier = Modifier
             .padding(8.dp)
             .fillMaxSize()
     ) {
-        LoginContent(mainController)
+        LoginContent(mainController, auth)
     }
 }

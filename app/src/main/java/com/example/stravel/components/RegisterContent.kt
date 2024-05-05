@@ -1,5 +1,7 @@
 package com.example.stravel.components
 
+import android.content.ContentValues
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -31,13 +33,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.stravel.ui.theme.CardColor
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun RegisterContent(
-    mainController: NavHostController
+    mainController: NavHostController,
+    auth: FirebaseAuth
 ) {
     var emailValue by remember{ mutableStateOf("") }
     var passwordValue by remember{ mutableStateOf("") }
+    var passwordRepeatValue by remember{ mutableStateOf("") }
     val customShape = RoundedCornerShape(4.dp)
 
     Column(
@@ -98,8 +103,8 @@ fun RegisterContent(
         )
         Spacer(modifier = Modifier.padding(8.dp))
         TextField(
-            value = passwordValue,
-            onValueChange = { passwordValue = it },
+            value = passwordRepeatValue,
+            onValueChange = { passwordRepeatValue = it },
             placeholder = {
                 Row {
                     Text("Nhập lại mật khẩu")
@@ -135,7 +140,14 @@ fun RegisterContent(
         }
         Spacer(modifier = Modifier.padding(8.dp))
         Button(
-            onClick = {},
+            onClick = {
+                if (passwordValue != passwordRepeatValue) {
+                    Log.d(ContentValues.TAG, "createUserWithEmailError: wrong repeat password")
+                } else {
+                    auth.createUserWithEmailAndPassword(emailValue, passwordValue)
+                    mainController.navigateUp()
+                }
+            },
             shape = customShape,
             modifier = Modifier.fillMaxWidth(0.7f)
         ) {

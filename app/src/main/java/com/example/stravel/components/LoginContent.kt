@@ -1,5 +1,7 @@
 package com.example.stravel.components
 
+import android.content.ContentValues
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -32,10 +34,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.stravel.ui.theme.CardColor
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun LoginContent(
-    mainController: NavHostController
+    mainController: NavHostController,
+    auth: FirebaseAuth
 ) {
     var emailValue by remember{ mutableStateOf("") }
     var passwordValue by remember{ mutableStateOf("") }
@@ -132,7 +136,15 @@ fun LoginContent(
         Spacer(modifier = Modifier.padding(8.dp))
 
         Button(
-            onClick = {},
+            onClick = {
+                auth.signInWithEmailAndPassword(emailValue, passwordValue)
+                if (auth.signInWithEmailAndPassword(emailValue, passwordValue).isCanceled) {
+                    Log.d(ContentValues.TAG, "login: cancleled")
+                } else {
+                    Log.d(ContentValues.TAG, "login:success")
+                    mainController.navigate("main")
+                }
+            },
             shape = customShape,
             colors = ButtonColors(
                 containerColor = CardColor,
