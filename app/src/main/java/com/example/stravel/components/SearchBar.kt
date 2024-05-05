@@ -11,10 +11,6 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
@@ -26,8 +22,7 @@ import com.example.stravel.R
 
 
 @Composable
-fun SearchBar() {
-    var searchValue by remember{ mutableStateOf("") }
+fun SearchBar(value: String, onSearch: (String) -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -39,25 +34,32 @@ fun SearchBar() {
             modifier = Modifier.padding(top = 16.dp, start = 16.dp)
         )
         TextField(
-            value = searchValue,
-            onValueChange = { searchValue = it },
+            value = value,
+            onValueChange = onSearch,
+            shape = RoundedCornerShape(10.dp),
             placeholder = {
                 Row {
                     Text("Tìm kiếm địa điểm")
                 }
-                    },
+            },
+//            trailingIcon = {
+//                if (value != "") {
+//                    IconButton(onClick = {value = ""}) {
+//                        Icon(Icons.Default.Clear, contentDescription = null)
+//                    }
+//                }
+//            },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text,
                 imeAction = ImeAction.Search
             ),
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = Color.Transparent, // Đặt màu viền khi focus là trong suốt
-                unfocusedBorderColor = Color.Transparent // Đặt màu viền khi unfocus là trong suốt
+                unfocusedBorderColor = Color.Transparent, // Đặt màu viền khi unfocus là trong suốt
             ),
             modifier = Modifier
                 .weight(1f)
                 .background(color = Color.Transparent)
-                .shadow(elevation = 0.dp, shape = RoundedCornerShape(10.dp))
         )
     }
 }

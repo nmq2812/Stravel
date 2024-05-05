@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 
 @Composable
-fun HomeContent(navController: NavHostController) {
+fun HomeContent(navController: NavHostController, searchValue: String) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -30,6 +30,7 @@ fun HomeContent(navController: NavHostController) {
         modifier = Modifier.fillMaxSize()
     ) {
         listOfPlaceItems.forEach {placeItem ->
+            if (searchValue == "" || placeItem.name.lowercase().contains(searchValue.lowercase()))
             items(1) {
                 Column(modifier = Modifier.fillMaxWidth()) {
                     GridItem(placeItem, navController)

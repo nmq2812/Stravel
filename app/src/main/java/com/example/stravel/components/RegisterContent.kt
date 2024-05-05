@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -63,6 +64,7 @@ fun RegisterContent(
                 keyboardType = KeyboardType.Email,
                 imeAction = ImeAction.Next
             ),
+            keyboardActions = KeyboardActions {},
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = CardColor,
                 unfocusedBorderColor = Color.Transparent
@@ -107,6 +109,7 @@ fun RegisterContent(
                 keyboardType = KeyboardType.Password,
                 imeAction = ImeAction.Done
             ),
+            keyboardActions = KeyboardActions { /* Xử lý khi nhấn Done */ },
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = CardColor,
                 unfocusedBorderColor = Color.Transparent

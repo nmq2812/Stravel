@@ -9,6 +9,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
@@ -20,6 +24,7 @@ import com.example.stravel.components.SearchBar
 
 @Composable
 fun HomeScreen(navController: NavHostController) {
+    var searchBarValue by remember { mutableStateOf("") }
     Box(modifier = Modifier
         .fillMaxSize(),
         contentAlignment = Alignment.Center
@@ -40,11 +45,14 @@ fun HomeScreen(navController: NavHostController) {
             Spacer(modifier = Modifier.height(16.dp))
 
             Box(modifier = Modifier.fillMaxWidth()) {
-                SearchBar()
+                SearchBar(
+                    value = searchBarValue, // Pass the searchBarValue directly
+                    onSearch = { newValue -> searchBarValue = newValue }
+                )
             }
 
             Column(modifier = Modifier.fillMaxSize()) {
-                HomeContent(navController)
+                HomeContent(navController, searchBarValue)
             }
         }
     }
