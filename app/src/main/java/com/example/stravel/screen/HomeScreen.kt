@@ -1,4 +1,4 @@
-package com.example.stravel.Screen
+package com.example.stravel.screen
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column

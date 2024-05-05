@@ -7,9 +7,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -23,7 +23,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.example.stravel.R
-import com.example.stravel.ui.theme.CardColor
 
 
 @Composable
@@ -39,7 +38,7 @@ fun SearchBar() {
             contentDescription = null,
             modifier = Modifier.padding(top = 16.dp, start = 16.dp)
         )
-        OutlinedTextField(
+        TextField(
             value = searchValue,
             onValueChange = { searchValue = it },
             placeholder = {
@@ -52,8 +51,8 @@ fun SearchBar() {
                 imeAction = ImeAction.Search
             ),
             colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = CardColor, // Đặt màu viền khi focus là xanh lá
-                unfocusedBorderColor = Color.Transparent // Đặt màu viền khi unfocus là đỏ
+                focusedBorderColor = Color.Transparent, // Đặt màu viền khi focus là trong suốt
+                unfocusedBorderColor = Color.Transparent // Đặt màu viền khi unfocus là trong suốt
             ),
             modifier = Modifier
                 .weight(1f)

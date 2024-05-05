@@ -1,7 +1,7 @@
 package com.example.stravel.components
 
 import com.example.stravel.R
-import com.example.stravel.Screen.Screens
+import com.example.stravel.screen.Screens
 
 data class NavItems(
     val iconSelected: Int,

@@ -17,14 +17,45 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.NavGraph
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.createGraph
+import androidx.navigation.navArgument
+import com.example.stravel.screen.AccountScreen
+import com.example.stravel.screen.DetailScreen
+import com.example.stravel.screen.FavouriteScreen
+import com.example.stravel.screen.HomeScreen
+import com.example.stravel.screen.Screens
+import com.example.stravel.screen.SettingScreen
 
 @Composable
-fun AppNavigation(navController: NavHostController, myGraph: NavGraph) {
+fun AppNavigation(mainController: NavHostController) {
+    val navController = rememberNavController()
+    val mainGraph = navController.createGraph(
+        startDestination = Screens.HomeScreen.name, // ID của điểm đến bắt đầu
+        //route = Screens.HomeScreen.name // Tuyến đường của NavGraph
+    ) {
+        // Thêm các điểm đến vào NavGraph
+        composable(Screens.HomeScreen.name) { HomeScreen(navController) }
+        composable(Screens.FavouriteScreen.name) { FavouriteScreen(navController) }
+        composable(Screens.SettingScreen.name) { SettingScreen(navController) }
+        composable(Screens.AccountScreen.name) { AccountScreen(mainController) }
+        composable(
+            route = Screens.DetailScreen.name + "/{placeId}",
+            arguments = listOf(
+                navArgument(name = "placeId") {
+                    type = NavType.IntType
+                }
+            )
+        ) {
+            DetailScreen(navController, it)
+        }
+    }
     Scaffold (
         modifier = Modifier.padding(8.dp),
         bottomBar = {
@@ -39,8 +70,6 @@ fun AppNavigation(navController: NavHostController, myGraph: NavGraph) {
                     content = {
                         val navBackStackEntry by navController.currentBackStackEntryAsState()
                         val currentDestination = navBackStackEntry?.destination
-
-
                         listOfNavItems.forEach {navItem ->
                             val condition = currentDestination?.hierarchy?.any {it.route == navItem.route} == true
                             NavigationBarItem(
@@ -79,7 +108,7 @@ fun AppNavigation(navController: NavHostController, myGraph: NavGraph) {
     ) { paddingValues ->
         NavHost(
             navController = navController,
-            graph = myGraph,
+            graph = mainGraph,
             modifier = Modifier
                 .padding(paddingValues)
         )

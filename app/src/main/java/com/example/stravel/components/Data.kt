@@ -81,7 +81,7 @@ val listOfPlaceItems = listOf(
                 "\n" +
                 "Ngoài vai trò là một địa điểm tưởng niệm, Lăng Chủ tịch Hồ Chí Minh còn là biểu tượng của lòng kính trọng và tôn trọng sâu sắc của nhân dân Việt Nam dành cho người đại diện lớn lao của họ.",
         score = 4,
-        favou = true
+        favou = false
 
     ),
     PlaceItem(
@@ -94,6 +94,6 @@ val listOfPlaceItems = listOf(
                 "\n" +
                 "Với kiến trúc hùng vĩ và sự phức tạp trong cách bố trí các công trình, Hoàng thành Thăng Long là một điểm đến thu hút không chỉ người dân Việt Nam mà còn khách du lịch quốc tế. Năm 2010, nó đã được UNESCO công nhận là Di sản Văn hóa Thế giới, vinh danh giá trị lịch sử và văn hóa của Việt Nam trên trường quốc tế.",
         score = 4,
-        favou = false
+        favou = true
     ),
 )

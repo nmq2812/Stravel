@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "509477311628",
-    "project_id": "stravel-99bb0",
-    "storage_bucket": "stravel-99bb0.appspot.com"
+    "project_number": "87381459722",
+    "project_id": "stravel-29713",
+    "storage_bucket": "stravel-29713.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:509477311628:android:6c05a488379ccec16317a9",
+        "mobilesdk_app_id": "1:87381459722:android:4118759ccf0d48512af0f3",
         "android_client_info": {
           "package_name": "com.example.stravel"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBcqW7ZZeKCy4TDlfHil9Zc8PN4SHIQN34"
+          "current_key": "AIzaSyBtNHT7eL4g0rUovTa1PWp0Z4uAtqECHWI"
         }
       ],
       "services": {

@@ -1,10 +1,18 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
-    id("com.google.gms.google-services") version "4.4.1" apply false
+    id("com.google.gms.google-services")
 }
 
 android {
+    signingConfigs {
+        create("stravel") {
+            storeFile = file("D:\\Stravel\\stravel_keystore.jks")
+            storePassword = "stravel"
+            keyAlias = "stravel"
+            keyPassword = "stravel"
+        }
+    }
     namespace = "com.example.stravel"
     compileSdk = 34
 
@@ -28,6 +36,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("stravel")
         }
     }
     compileOptions {
@@ -71,6 +80,6 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-    implementation(platform("com.google.firebase:firebase-bom:32.8.1"))
+    implementation(platform("com.google.firebase:firebase-bom:33.0.0"))
     implementation("com.google.firebase:firebase-analytics")
 }

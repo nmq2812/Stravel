@@ -1,4 +1,4 @@
-package com.example.stravel.Screen;
+package com.example.stravel.screen;
 
 enum class Screens {
     HomeScreen,
