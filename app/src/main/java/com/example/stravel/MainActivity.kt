@@ -13,15 +13,13 @@ import com.example.stravel.screen.LoginScreen
 import com.example.stravel.screen.RegisterScreen
 import com.example.stravel.ui.theme.StravelTheme
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 
 private lateinit var auth: FirebaseAuth
+// ...
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            auth = Firebase.auth
            StravelTheme {
                Greeting()
            }

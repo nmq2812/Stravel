@@ -22,6 +22,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.stravel.components.HomeContent
 import com.example.stravel.components.SearchBar
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 
 @Composable
 fun HomeScreen(navController: NavHostController) {
@@ -35,8 +37,15 @@ fun HomeScreen(navController: NavHostController) {
                 .fillMaxWidth()
         ) {
             Column() {
+                var appName by remember { mutableStateOf("") }
+                val database = Firebase.database
+                val myRef = database.getReference("title")
+                myRef.child("name").get().addOnSuccessListener {
+                    appName = it.value.toString()
+                }
+
                 Text(
-                    "STRAVEL",
+                    appName.uppercase(),
                     style = TextStyle(fontSize = 48.sp),
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier
