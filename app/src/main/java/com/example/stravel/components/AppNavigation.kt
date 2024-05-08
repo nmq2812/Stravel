@@ -34,15 +34,15 @@ import com.example.stravel.screen.Screens
 import com.example.stravel.screen.SettingScreen
 
 @Composable
-fun AppNavigation(mainController: NavHostController) {
+fun AppNavigation(mainController: NavHostController, listOfPlaceItems: MutableList<PlaceItem>?) {
     val navController = rememberNavController()
     val mainGraph = navController.createGraph(
         startDestination = Screens.HomeScreen.name, // ID của điểm đến bắt đầu
         //route = Screens.HomeScreen.name // Tuyến đường của NavGraph
     ) {
         // Thêm các điểm đến vào NavGraph
-        composable(Screens.HomeScreen.name) { HomeScreen(navController) }
-        composable(Screens.FavouriteScreen.name) { FavouriteScreen(navController) }
+        composable(Screens.HomeScreen.name) { HomeScreen(navController, listOfPlaceItems) }
+        composable(Screens.FavouriteScreen.name) { FavouriteScreen(navController, listOfPlaceItems) }
         composable(Screens.SettingScreen.name) { SettingScreen(navController) }
         composable(Screens.AccountScreen.name) { AccountScreen(mainController) }
         composable(
@@ -53,7 +53,7 @@ fun AppNavigation(mainController: NavHostController) {
                 }
             )
         ) {
-            DetailScreen(navController, it)
+            DetailScreen(navController, it, listOfPlaceItems)
         }
     }
     Scaffold (

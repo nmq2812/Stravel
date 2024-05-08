@@ -19,14 +19,17 @@ import androidx.navigation.NavHostController
 import com.example.stravel.R
 import com.example.stravel.components.DetailContent
 import com.example.stravel.components.PlaceItem
-import com.example.stravel.components.listOfPlaceItems
 
 
 @Composable
-fun DetailScreen(navController: NavHostController, backStateEntry: NavBackStackEntry) {
+fun DetailScreen(
+    navController: NavHostController,
+    backStateEntry: NavBackStackEntry,
+    listOfPlaceItems: MutableList<PlaceItem>?
+) {
     val placeId = backStateEntry.arguments?.getInt("placeId")
     requireNotNull(placeId)
-    val pItem: PlaceItem = listOfPlaceItems[placeId.toInt() -1]
+    val pItem = listOfPlaceItems?.get(placeId.toInt() -1)
     Scaffold(
         topBar = {
             Row(
@@ -53,6 +56,8 @@ fun DetailScreen(navController: NavHostController, backStateEntry: NavBackStackE
         },
         modifier = Modifier.fillMaxSize()
     ) { paddingValues ->
-        DetailContent(pItem, paddingValues)
+        if (pItem != null) {
+            DetailContent(pItem, listOfPlaceItems, paddingValues)
+        }
     }
 }

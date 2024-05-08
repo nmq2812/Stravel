@@ -18,7 +18,11 @@ import androidx.navigation.NavHostController
 import com.example.stravel.ui.theme.CardColor
 
 @Composable
-fun HomeContent(navController: NavHostController, searchValue: String) {
+fun HomeContent(
+    navController: NavHostController,
+    searchValue: String,
+    listOfPlaceItems: MutableList<PlaceItem>?
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -47,11 +51,13 @@ fun HomeContent(navController: NavHostController, searchValue: String) {
         columns = GridCells.Fixed(2),
         modifier = Modifier.fillMaxSize()
     ) {
-        listOfPlaceItems.forEach {placeItem ->
-            if (searchValue == "" || placeItem.name.lowercase().contains(searchValue.lowercase())) {
-                items(1) {
-                    Column(modifier = Modifier.fillMaxWidth()) {
-                        GridItem(placeItem, navController)
+        if (listOfPlaceItems != null) {
+            listOfPlaceItems.forEach {placeItem ->
+                if (searchValue == "" || placeItem.name!!.lowercase().contains(searchValue.lowercase())) {
+                    items(1) {
+                        Column(modifier = Modifier.fillMaxWidth()) {
+                            GridItem(placeItem, navController)
+                        }
                     }
                 }
             }

@@ -10,15 +10,17 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 
 @Composable
-fun FavouriteContent(navController: NavHostController) {
+fun FavouriteContent(navController: NavHostController, listOfPlaceItems: MutableList<PlaceItem>?) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         modifier = Modifier.fillMaxWidth()
     ) {
-        listOfPlaceItems.filter{it.favou}.forEach {placeItem ->
-            items(1) {
-                Box(modifier = Modifier.fillMaxHeight()) {
-                    GridItem(placeItem, navController)
+        if (listOfPlaceItems != null) {
+            listOfPlaceItems.filter{it.favou}.forEach {placeItem ->
+                items(1) {
+                    Box(modifier = Modifier.fillMaxHeight()) {
+                        GridItem(placeItem, navController)
+                    }
                 }
             }
         }

@@ -40,7 +40,7 @@ fun GridItem(it: PlaceItem, navController: NavHostController) {
                 .align(Alignment.CenterHorizontally)
         )
         Text(
-            it.name,
+            it.name.toString(),
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .fillMaxWidth()

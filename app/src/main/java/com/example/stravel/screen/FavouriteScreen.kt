@@ -7,13 +7,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import com.example.stravel.components.FavouriteContent
+import com.example.stravel.components.PlaceItem
 
 @Composable
-fun FavouriteScreen(navController: NavHostController) {
+fun FavouriteScreen(navController: NavHostController, listOfPlaceItems: MutableList<PlaceItem>?) {
     Box(modifier = Modifier
         .fillMaxSize()
         ,contentAlignment = Alignment.Center
     ) {
-        FavouriteContent(navController)
+        FavouriteContent(navController, listOfPlaceItems)
     }
 }

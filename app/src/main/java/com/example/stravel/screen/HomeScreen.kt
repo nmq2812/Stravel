@@ -21,12 +21,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.stravel.components.HomeContent
+import com.example.stravel.components.PlaceItem
 import com.example.stravel.components.SearchBar
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.getValue
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
 @Composable
-fun HomeScreen(navController: NavHostController) {
+fun HomeScreen(navController: NavHostController, listOfPlaceItems: MutableList<PlaceItem>?) {
     var searchBarValue by remember { mutableStateOf("") }
     Box(modifier = Modifier
         .fillMaxSize(),
@@ -38,11 +43,17 @@ fun HomeScreen(navController: NavHostController) {
         ) {
             Column() {
                 var appName by remember { mutableStateOf("") }
-                val database = Firebase.database
-                val myRef = database.getReference("title")
-                myRef.child("name").get().addOnSuccessListener {
-                    appName = it.value.toString()
+                var database = Firebase.database.getReference("AppName")
+                val dataListener = object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        appName = snapshot.getValue<String>().toString()
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+
+                    }
                 }
+                database.addValueEventListener(dataListener)
 
                 Text(
                     appName.uppercase(),
@@ -63,7 +74,7 @@ fun HomeScreen(navController: NavHostController) {
             }
 
             Column(modifier = Modifier.fillMaxSize()) {
-                HomeContent(navController, searchBarValue)
+                HomeContent(navController, searchBarValue, listOfPlaceItems)
             }
         }
     }

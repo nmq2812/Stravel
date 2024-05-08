@@ -41,22 +41,30 @@ import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.example.stravel.R
 import com.example.stravel.ui.theme.CardColor
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.getValue
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 
 @Composable
-fun DetailContent(pItem: PlaceItem, pValue: PaddingValues) {
+fun DetailContent(pItem: PlaceItem, listOfPlaceItems: MutableList<PlaceItem>?, pValue: PaddingValues) {
     LazyColumn(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .padding(pValue)
     ) {
         item {
-            Text(
-                text = pItem.name.uppercase(),
-                style = TextStyle(fontSize = 36.sp),
-                modifier = Modifier
-                    .padding(8.dp)
+            pItem.name?.let {
+                Text(
+                    text = it.uppercase(),
+                    style = TextStyle(fontSize = 36.sp),
+                    modifier = Modifier
+                        .padding(8.dp)
 
-            )
+                )
+            }
         }
         item {
             Box {
@@ -121,14 +129,16 @@ fun DetailContent(pItem: PlaceItem, pValue: PaddingValues) {
         }
         item {
             Text(
-                text = pItem.description,
+                text = pItem.description!!,
                 textAlign = TextAlign.Justify
             )
         }
         item {
             Spacer(modifier = Modifier.padding(4.dp))
             ReviewContent(
-                pItem.score
+                pItem,
+                listOfPlaceItems,
+                pItem.score!!
             ) { newRating ->
                 pItem.score = newRating
             }
@@ -137,11 +147,36 @@ fun DetailContent(pItem: PlaceItem, pValue: PaddingValues) {
 }
 
 @Composable
-fun ReviewContent(score: Int, onRatingChange: (Int) -> Unit) {
+fun ReviewContent(
+    pItem: PlaceItem,
+    listOfPlaceItems: MutableList<PlaceItem>?,
+    score: Int,
+    onRatingChange: (Int) -> Unit
+) {
+    var data = pItem.name?.let { Firebase.database.getReference("PlaceItem").child(it).child("score") }
+    val dataListener = object : ValueEventListener {
+        override fun onDataChange(snapshot: DataSnapshot) {
+            for (pItemSnapshot in snapshot.children) {
+                val pItem = pItemSnapshot.getValue<PlaceItem>()
+                if (pItem != null) {
+                    if (listOfPlaceItems != null) {
+                        listOfPlaceItems.add(pItem)
+                    }
+                }
+            }
+        }
+
+        override fun onCancelled(error: DatabaseError) {
+
+        }
+    }
+    data?.addValueEventListener(dataListener)
+    var item:String = "null--"
+
     var starScore by remember { mutableIntStateOf(score) }
     if (score > 5 || score < 0) {
         Text(
-            text = "ERROR: Score out of range",
+            text = item,
             color = Color.Red,
             fontStyle = FontStyle.Italic
         )
@@ -171,8 +206,6 @@ fun ReviewContent(score: Int, onRatingChange: (Int) -> Unit) {
                 }
             }
         }
-
-
         Text(
             text = "Rating: $starScore/5",
             modifier = Modifier
