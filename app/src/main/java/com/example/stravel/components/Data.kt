@@ -6,13 +6,12 @@ import com.google.firebase.database.IgnoreExtraProperties
 @IgnoreExtraProperties
 data class PlaceItem(
     val name: String? = "",
-    val id: Int? = 0,
+    val id: Long? = 0,
     val image: String? = "",
     val description: String? = "",
-    var score: Int? = 0,
+    var score: Long? = 0,
     var favou: Boolean = false,
 ) {
-
     @Exclude
     fun toMap(): Map<String, Any?> {
         return mapOf(

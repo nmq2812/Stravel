@@ -25,7 +25,7 @@ import com.example.stravel.components.PlaceItem
 fun DetailScreen(
     navController: NavHostController,
     backStateEntry: NavBackStackEntry,
-    listOfPlaceItems: MutableList<PlaceItem>?
+    listOfPlaceItems: List<PlaceItem>
 ) {
     val placeId = backStateEntry.arguments?.getInt("placeId")
     requireNotNull(placeId)
@@ -57,7 +57,7 @@ fun DetailScreen(
         modifier = Modifier.fillMaxSize()
     ) { paddingValues ->
         if (pItem != null) {
-            DetailContent(pItem, listOfPlaceItems, paddingValues)
+            DetailContent(pItem,paddingValues)
         }
     }
 }

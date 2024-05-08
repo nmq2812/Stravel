@@ -10,7 +10,7 @@ import com.example.stravel.components.FavouriteContent
 import com.example.stravel.components.PlaceItem
 
 @Composable
-fun FavouriteScreen(navController: NavHostController, listOfPlaceItems: MutableList<PlaceItem>?) {
+fun FavouriteScreen(navController: NavHostController, listOfPlaceItems: List<PlaceItem>) {
     Box(modifier = Modifier
         .fillMaxSize()
         ,contentAlignment = Alignment.Center

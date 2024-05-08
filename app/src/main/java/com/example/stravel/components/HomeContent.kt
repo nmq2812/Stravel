@@ -21,7 +21,7 @@ import com.example.stravel.ui.theme.CardColor
 fun HomeContent(
     navController: NavHostController,
     searchValue: String,
-    listOfPlaceItems: MutableList<PlaceItem>?
+    listOfPlaceItems: List<PlaceItem>
 ) {
     Row(
         modifier = Modifier

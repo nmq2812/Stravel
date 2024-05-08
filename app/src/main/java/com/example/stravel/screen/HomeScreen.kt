@@ -31,7 +31,7 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
 @Composable
-fun HomeScreen(navController: NavHostController, listOfPlaceItems: MutableList<PlaceItem>?) {
+fun HomeScreen(navController: NavHostController, listOfPlaceItems: List<PlaceItem>) {
     var searchBarValue by remember { mutableStateOf("") }
     Box(modifier = Modifier
         .fillMaxSize(),

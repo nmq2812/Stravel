@@ -25,7 +25,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -44,12 +44,11 @@ import com.example.stravel.ui.theme.CardColor
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.getValue
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
 @Composable
-fun DetailContent(pItem: PlaceItem, listOfPlaceItems: MutableList<PlaceItem>?, pValue: PaddingValues) {
+fun DetailContent(pItem: PlaceItem, pValue: PaddingValues) {
     LazyColumn(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -137,7 +136,6 @@ fun DetailContent(pItem: PlaceItem, listOfPlaceItems: MutableList<PlaceItem>?, p
             Spacer(modifier = Modifier.padding(4.dp))
             ReviewContent(
                 pItem,
-                listOfPlaceItems,
                 pItem.score!!
             ) { newRating ->
                 pItem.score = newRating
@@ -149,21 +147,14 @@ fun DetailContent(pItem: PlaceItem, listOfPlaceItems: MutableList<PlaceItem>?, p
 @Composable
 fun ReviewContent(
     pItem: PlaceItem,
-    listOfPlaceItems: MutableList<PlaceItem>?,
-    score: Int,
-    onRatingChange: (Int) -> Unit
+    score: Long,
+    onRatingChange: (Long) -> Unit
 ) {
-    var data = pItem.name?.let { Firebase.database.getReference("PlaceItem").child(it).child("score") }
+    var starScore by remember { mutableLongStateOf(score) }
+    val data = pItem.name?.let { Firebase.database.getReference("PlaceItem").child(it).child("score") }
     val dataListener = object : ValueEventListener {
         override fun onDataChange(snapshot: DataSnapshot) {
-            for (pItemSnapshot in snapshot.children) {
-                val pItem = pItemSnapshot.getValue<PlaceItem>()
-                if (pItem != null) {
-                    if (listOfPlaceItems != null) {
-                        listOfPlaceItems.add(pItem)
-                    }
-                }
-            }
+           starScore = snapshot.value as Long
         }
 
         override fun onCancelled(error: DatabaseError) {
@@ -171,9 +162,7 @@ fun ReviewContent(
         }
     }
     data?.addValueEventListener(dataListener)
-    var item:String = "null--"
-
-    var starScore by remember { mutableIntStateOf(score) }
+    val item = "-null-"
     if (score > 5 || score < 0) {
         Text(
             text = item,
@@ -191,17 +180,16 @@ fun ReviewContent(
                     Box (
                         modifier = Modifier
                             .clickable {
-                                starScore = i
-                                onRatingChange(i)
+                                starScore = i.toLong()
+                                onRatingChange(i.toLong())
+                                data?.setValue(starScore)
                             }
                     ){
                         StarIcon(
                             size = 54.dp,
                             color = starColor,
                             filled = score >= i
-                        ) {
-                            onRatingChange(i)
-                        }
+                        )
                     }
                 }
             }
@@ -214,7 +202,7 @@ fun ReviewContent(
 }
 
 @Composable
-fun StarIcon(size: Dp, color: Color, filled: Boolean, function: () -> Unit) {
+fun StarIcon(size: Dp, color: Color, filled: Boolean,) {
     Icon(
         imageVector = if (filled) {Icons.Filled.Star}
         else {Icons.Outlined.Star},

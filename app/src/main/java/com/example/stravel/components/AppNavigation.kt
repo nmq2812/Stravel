@@ -1,5 +1,6 @@
 package com.example.stravel.components
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -32,9 +33,17 @@ import com.example.stravel.screen.FavouriteScreen
 import com.example.stravel.screen.HomeScreen
 import com.example.stravel.screen.Screens
 import com.example.stravel.screen.SettingScreen
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.getValue
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 
 @Composable
-fun AppNavigation(mainController: NavHostController, listOfPlaceItems: MutableList<PlaceItem>?) {
+fun AppNavigation(mainController: NavHostController) {
+    val listOfPlaceItems: List<PlaceItem> = getPlaceItemList()
+    Log.i("tag", listOfPlaceItems.toString())
     val navController = rememberNavController()
     val mainGraph = navController.createGraph(
         startDestination = Screens.HomeScreen.name, // ID của điểm đến bắt đầu
@@ -66,7 +75,11 @@ fun AppNavigation(mainController: NavHostController, listOfPlaceItems: MutableLi
                     .fillMaxWidth()
                     .background(Color.Transparent)
                     .padding(bottom = 8.dp)
-                    .shadow(elevation = 3.dp, shape = RoundedCornerShape(100.dp), spotColor = mainColor),
+                    .shadow(
+                        elevation = 3.dp,
+                        shape = RoundedCornerShape(100.dp),
+                        spotColor = mainColor
+                    ),
                     content = {
                         val navBackStackEntry by navController.currentBackStackEntryAsState()
                         val currentDestination = navBackStackEntry?.destination
@@ -113,4 +126,30 @@ fun AppNavigation(mainController: NavHostController, listOfPlaceItems: MutableLi
                 .padding(paddingValues)
         )
     }
+}
+
+
+
+@Composable
+fun getPlaceItemList() : List<PlaceItem> {
+    val database = Firebase.database.getReference("PlaceItem")
+    var placeItems: MutableList<PlaceItem> = mutableListOf()
+    val dataListener = object : ValueEventListener {
+        override fun onDataChange(snapshot: DataSnapshot) {
+            for (pItemSnapshot in snapshot.children) {
+                val pItem = pItemSnapshot.getValue<PlaceItem>()
+                if (pItem != null && !placeItems.contains(pItem)) {
+                    placeItems.add(pItem)
+                }
+            }
+            //placeItems.distinctBy { it.id }
+            placeItems.sortBy { it.id }
+
+        }
+
+        override fun onCancelled(error: DatabaseError) {
+        }
+    }
+    database.addValueEventListener(dataListener)
+    return placeItems
 }

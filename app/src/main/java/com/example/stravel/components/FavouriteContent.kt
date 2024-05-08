@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 
 @Composable
-fun FavouriteContent(navController: NavHostController, listOfPlaceItems: MutableList<PlaceItem>?) {
+fun FavouriteContent(navController: NavHostController, listOfPlaceItems: List<PlaceItem>?) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         modifier = Modifier.fillMaxWidth()
