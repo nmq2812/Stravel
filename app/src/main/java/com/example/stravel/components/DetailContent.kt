@@ -22,10 +22,12 @@ import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -83,13 +85,30 @@ fun DetailContent(pItem: PlaceItem, pValue: PaddingValues) {
                     .fillMaxWidth()
                     .padding(top = 8.dp, bottom = 8.dp)
             ) {
+                var isFavou by remember {mutableStateOf(pItem.favou)}
+
                 IconButton(
-                    onClick = {},
+                    onClick = {
+                        isFavou = !isFavou
+                        Firebase.database.getReference("PlaceItem").child(pItem.name!!).child("favou").setValue(isFavou)
+                        },
                     modifier = Modifier
                         .size(36.dp)
                         .padding(start = 4.dp, end = 8.dp)
                 ) {
-                    Icon(painterResource(id = R.drawable.heart), contentDescription = null)
+                    if (isFavou) {
+                        Icon(
+                            painterResource(id = R.drawable.heart),
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.error
+                        )
+                    } else {
+                        Icon(
+                            painterResource(id = R.drawable.heart_outline),
+                            contentDescription = null
+                        )
+                    }
+
                 }
                 IconButton(
                     onClick = {},

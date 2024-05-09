@@ -1,7 +1,14 @@
 package com.example.stravel.components
 
+import androidx.compose.runtime.Composable
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.Exclude
 import com.google.firebase.database.IgnoreExtraProperties
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.getValue
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 
 @IgnoreExtraProperties
 data class PlaceItem(
@@ -23,6 +30,29 @@ data class PlaceItem(
             "favou" to favou
         )
     }
+}
+
+@Composable
+fun getPlaceItemList() : List<PlaceItem> {
+    val database = Firebase.database.getReference("PlaceItem")
+    val placeItems: MutableList<PlaceItem> = mutableListOf()
+    val dataListener = object : ValueEventListener {
+        override fun onDataChange(snapshot: DataSnapshot) {
+            for (pItemSnapshot in snapshot.children) {
+                val pItem = pItemSnapshot.getValue<PlaceItem>()
+                if (pItem != null && !placeItems.contains(pItem)) {
+                    placeItems.add(pItem)
+                }
+            }
+            placeItems.sortBy { it.id }
+            println(placeItems.toString())
+        }
+
+        override fun onCancelled(error: DatabaseError) {
+        }
+    }
+    database.addValueEventListener(dataListener)
+    return placeItems
 }
 
 

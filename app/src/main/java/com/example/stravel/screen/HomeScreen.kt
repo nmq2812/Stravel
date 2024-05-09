@@ -33,6 +33,7 @@ import com.google.firebase.ktx.Firebase
 @Composable
 fun HomeScreen(navController: NavHostController, listOfPlaceItems: List<PlaceItem>) {
     var searchBarValue by remember { mutableStateOf("") }
+    listOfPlaceItems.distinctBy { it.name }
     Box(modifier = Modifier
         .fillMaxSize(),
         contentAlignment = Alignment.Center

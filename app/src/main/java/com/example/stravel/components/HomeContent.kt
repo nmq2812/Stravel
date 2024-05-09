@@ -2,7 +2,7 @@ package com.example.stravel.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -51,13 +51,12 @@ fun HomeContent(
         columns = GridCells.Fixed(2),
         modifier = Modifier.fillMaxSize()
     ) {
-        if (listOfPlaceItems != null) {
-            listOfPlaceItems.forEach {placeItem ->
-                if (searchValue == "" || placeItem.name!!.lowercase().contains(searchValue.lowercase())) {
-                    items(1) {
-                        Column(modifier = Modifier.fillMaxWidth()) {
-                            GridItem(placeItem, navController)
-                        }
+        listOfPlaceItems.distinctBy { it.id }
+        listOfPlaceItems.forEach {placeItem ->
+            if (searchValue == "" || placeItem.name!!.lowercase().contains(searchValue.lowercase())) {
+                items(1) {
+                    Box(modifier = Modifier.fillMaxWidth()) {
+                        GridItem(placeItem, navController)
                     }
                 }
             }

@@ -33,12 +33,6 @@ import com.example.stravel.screen.FavouriteScreen
 import com.example.stravel.screen.HomeScreen
 import com.example.stravel.screen.Screens
 import com.example.stravel.screen.SettingScreen
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.getValue
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
 
 @Composable
 fun AppNavigation(mainController: NavHostController) {
@@ -129,27 +123,3 @@ fun AppNavigation(mainController: NavHostController) {
 }
 
 
-
-@Composable
-fun getPlaceItemList() : List<PlaceItem> {
-    val database = Firebase.database.getReference("PlaceItem")
-    var placeItems: MutableList<PlaceItem> = mutableListOf()
-    val dataListener = object : ValueEventListener {
-        override fun onDataChange(snapshot: DataSnapshot) {
-            for (pItemSnapshot in snapshot.children) {
-                val pItem = pItemSnapshot.getValue<PlaceItem>()
-                if (pItem != null && !placeItems.contains(pItem)) {
-                    placeItems.add(pItem)
-                }
-            }
-            //placeItems.distinctBy { it.id }
-            placeItems.sortBy { it.id }
-
-        }
-
-        override fun onCancelled(error: DatabaseError) {
-        }
-    }
-    database.addValueEventListener(dataListener)
-    return placeItems
-}

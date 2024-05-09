@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -20,17 +19,18 @@ import com.google.firebase.ktx.Firebase
 
 private lateinit var auth: FirebaseAuth
 private lateinit var placeItemReference: DatabaseReference
+
 // ...
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             auth = Firebase.auth
-            placeItemReference = Firebase.database.reference
-           StravelTheme {
-               Greeting()
-           }
-       }
+            placeItemReference = Firebase.database.getReference("PlaceItem")
+            StravelTheme {
+                Greeting()
+            }
+        }
     }
 }
 
@@ -42,14 +42,7 @@ fun Greeting() {
     NavHost(mainController,"main") {
         composable("login") { LoginScreen(mainController, auth) }
         composable("register") { RegisterScreen(mainController, auth) }
-        composable("main") {AppNavigation(mainController)}
+        composable("main") {AppNavigation(mainController,)}
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    StravelTheme {
-        Greeting()
-    }
-}
