@@ -12,6 +12,10 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -23,6 +27,7 @@ fun HomeContent(
     searchValue: String,
     listOfPlaceItems: List<PlaceItem>
 ) {
+    var reloadContent by remember {mutableStateOf(true)}
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -51,8 +56,9 @@ fun HomeContent(
         columns = GridCells.Fixed(2),
         modifier = Modifier.fillMaxSize()
     ) {
-        listOfPlaceItems.distinctBy { it.id }
+
         listOfPlaceItems.forEach {placeItem ->
+            listOfPlaceItems.distinctBy { it.id }
             if (searchValue == "" || placeItem.name!!.lowercase().contains(searchValue.lowercase())) {
                 items(1) {
                     Box(modifier = Modifier.fillMaxWidth()) {

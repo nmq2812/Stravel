@@ -29,7 +29,7 @@ fun DetailScreen(
 ) {
     val placeId = backStateEntry.arguments?.getInt("placeId")
     requireNotNull(placeId)
-    val pItem = listOfPlaceItems?.get(placeId.toInt() -1)
+    val pItem = listOfPlaceItems.find { it.id?.toInt() == placeId }
     Scaffold(
         topBar = {
             Row(

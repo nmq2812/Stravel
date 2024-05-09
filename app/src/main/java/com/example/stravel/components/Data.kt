@@ -33,7 +33,7 @@ data class PlaceItem(
 }
 
 @Composable
-fun getPlaceItemList() : List<PlaceItem> {
+fun getPlaceItemList() : MutableList<PlaceItem> {
     val database = Firebase.database.getReference("PlaceItem")
     val placeItems: MutableList<PlaceItem> = mutableListOf()
     val dataListener = object : ValueEventListener {

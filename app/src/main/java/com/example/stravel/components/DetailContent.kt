@@ -90,8 +90,9 @@ fun DetailContent(pItem: PlaceItem, pValue: PaddingValues) {
                 IconButton(
                     onClick = {
                         isFavou = !isFavou
+                        listOfPlaceItems.remove(pItem)
                         Firebase.database.getReference("PlaceItem").child(pItem.name!!).child("favou").setValue(isFavou)
-                        },
+                    },
                     modifier = Modifier
                         .size(36.dp)
                         .padding(start = 4.dp, end = 8.dp)
