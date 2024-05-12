@@ -13,6 +13,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -33,8 +34,9 @@ import com.example.stravel.screen.FavouriteScreen
 import com.example.stravel.screen.HomeScreen
 import com.example.stravel.screen.Screens
 import com.example.stravel.screen.SettingScreen
+import com.example.stravel.ui.theme.CardColor
 
-public lateinit var listOfPlaceItems: MutableList<PlaceItem>
+lateinit var listOfPlaceItems: MutableList<PlaceItem>
 
 @Composable
 fun AppNavigation(mainController: NavHostController) {
@@ -61,15 +63,18 @@ fun AppNavigation(mainController: NavHostController) {
         }
     }
     Scaffold (
-        modifier = Modifier.padding(8.dp),
+        modifier = Modifier
+            .background(color = Color.Transparent)
+            .padding(8.dp),
         bottomBar = {
-            val mainColor = Color(0xFF176FF2)
+            val mainColor = CardColor
             NavigationBar(
                 containerColor = Color.Transparent,
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(Color.Transparent)
                     .padding(bottom = 8.dp)
+                    .clip(RoundedCornerShape(100.dp))
                     .shadow(
                         elevation = 3.dp,
                         shape = RoundedCornerShape(100.dp),
