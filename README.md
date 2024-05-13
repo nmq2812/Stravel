@@ -6,9 +6,11 @@
 - Hệ thống thiết kế: Material Design (Material3)
 - Local Storages: SharedPreferences
 ### Backend:
-- FireBase
+- FireBase Realtime database
+- Firebase Authentication
+- Firebase Storage
 
-### biểu đồ hoạt động: 
+### Biểu đồ hoạt động: 
 ![Screenshot 2024-05-13 135359](https://github.com/nmq2812/Stravel/assets/96787119/1bddc59a-3dc7-4346-8cba-461926bbe2d6)
 
 ### Lưu ý:
