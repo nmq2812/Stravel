@@ -1,5 +1,3 @@
-![image](https://github.com/nmq2812/Stravel/assets/96787119/4d050375-5cf7-4118-9ecd-4ed3f1fb166c)# Stravel
-
 ### Chủ đề: Stravel - Ứng dụng tìm kiếm địa danh du lịch Việt Nam
 ### Frontend:
 - Ngôn ngữ lập trình: Kotlin
