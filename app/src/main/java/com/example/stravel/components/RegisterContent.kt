@@ -1,7 +1,7 @@
 package com.example.stravel.components
 
-import android.content.ContentValues
-import android.util.Log
+import android.view.Gravity
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -14,10 +14,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Email
+import androidx.compose.material.icons.rounded.Lock
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -29,10 +35,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -49,6 +60,13 @@ fun RegisterContent(
     var passwordValue by remember{ mutableStateOf("") }
     var passwordRepeatValue by remember{ mutableStateOf("") }
     val customShape = RoundedCornerShape(4.dp)
+    val context  = LocalContext.current
+    val emailFocusRequester = FocusRequester()
+    val passwordFocusRequester = FocusRequester()
+    val rePasswordFocusRequester = FocusRequester()
+    var isHidePassword by remember {
+        mutableStateOf(true)
+    }
 
     Box (
         modifier = Modifier
@@ -87,12 +105,18 @@ fun RegisterContent(
                         Text("Nhập Email")
                     }
                 },
+                label = { Text(text = "Email")},
+                leadingIcon = { Icon(Icons.Rounded.Email, contentDescription = null, tint = CardColor) },
                 shape = RoundedCornerShape(16.dp),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Email,
                     imeAction = ImeAction.Next
                 ),
-                keyboardActions = KeyboardActions {},
+                keyboardActions = KeyboardActions(
+                    onNext = {
+                        passwordFocusRequester.requestFocus()
+                    }
+                ),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = CardColor,
                     unfocusedBorderColor = CardColor
@@ -100,7 +124,8 @@ fun RegisterContent(
                 modifier = Modifier
                     .background(color = Color.Transparent)
                     .fillMaxWidth(0.7f)
-                    .clip(shape = RoundedCornerShape(16.dp)),
+                    .clip(shape = RoundedCornerShape(16.dp))
+                    .focusRequester(emailFocusRequester),
             )
 
             Spacer(modifier = Modifier.padding(8.dp))
@@ -113,10 +138,54 @@ fun RegisterContent(
                         Text("Nhập mật khẩu")
                     }
                 },
+                label = { Text(text = "Password")},
+                leadingIcon = { Icon(Icons.Rounded.Lock, contentDescription = null, tint = CardColor) },
+                visualTransformation = if (isHidePassword) {
+                    PasswordVisualTransformation()
+                } else {
+                    VisualTransformation.None
+                },
+                trailingIcon = {
+                    if (passwordValue != "") {
+                        if (isHidePassword) {
+                            IconButton(
+                                onClick = {
+                                    isHidePassword = !isHidePassword
+                                }
+                            ) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.hide_password_icon),
+                                    contentDescription = null,
+                                    tint = CardColor,
+                                    modifier = Modifier.size(24.dp)
+                                )
+                            }
+                        } else {
+                            IconButton(
+                                onClick = {
+                                    isHidePassword = !isHidePassword
+                                }
+                            ) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.show_password_icon),
+                                    contentDescription = null,
+                                    tint = CardColor,
+                                    modifier = Modifier.size(24.dp)
+
+                                )
+                            }
+                        }
+                    }
+                },
                 shape = RoundedCornerShape(16.dp),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Password,
-                    imeAction = ImeAction.Done
+                    imeAction = ImeAction.Next
+                ),
+                keyboardActions = KeyboardActions(
+                    onNext = {
+                        rePasswordFocusRequester.requestFocus()
+                    }
                 ),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = CardColor,
@@ -125,6 +194,7 @@ fun RegisterContent(
                 modifier = Modifier
                     .background(color = Color.Transparent)
                     .fillMaxWidth(0.7f)
+                    .focusRequester(passwordFocusRequester)
                     .clip(shape = RoundedCornerShape(16.dp)),
             )
 
@@ -138,12 +208,50 @@ fun RegisterContent(
                         Text("Nhập lại mật khẩu")
                     }
                 },
+                label = { Text(text = "Password")},
+                leadingIcon = { Icon(Icons.Rounded.Lock, contentDescription = null, tint = CardColor) },
+                visualTransformation = if (isHidePassword) {
+                    PasswordVisualTransformation()
+                } else {
+                    VisualTransformation.None
+                },
+                trailingIcon = {
+                    if (passwordValue != "") {
+                        if (isHidePassword) {
+                            IconButton(
+                                onClick = {
+                                    isHidePassword = !isHidePassword
+                                }
+                            ) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.hide_password_icon),
+                                    contentDescription = null,
+                                    tint = CardColor,
+                                    modifier = Modifier.size(24.dp)
+                                )
+                            }
+                        } else {
+                            IconButton(
+                                onClick = {
+                                    isHidePassword = !isHidePassword
+                                }
+                            ) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.show_password_icon),
+                                    contentDescription = null,
+                                    tint = CardColor,
+                                    modifier = Modifier.size(24.dp)
+
+                                )
+                            }
+                        }
+                    }
+                },
                 shape = RoundedCornerShape(16.dp),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Password,
                     imeAction = ImeAction.Done
                 ),
-                keyboardActions = KeyboardActions { /* Xử lý khi nhấn Done */ },
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = CardColor,
                     unfocusedBorderColor = CardColor
@@ -151,6 +259,7 @@ fun RegisterContent(
                 modifier = Modifier
                     .background(color = Color.Transparent)
                     .fillMaxWidth(0.7f)
+                    .focusRequester(rePasswordFocusRequester)
                     .clip(shape = RoundedCornerShape(16.dp)),
             )
 
@@ -175,27 +284,39 @@ fun RegisterContent(
             Button(
                 onClick = {
                     if (passwordValue != passwordRepeatValue) {
-                        Log.d(ContentValues.TAG, "createUserWithEmailError: wrong repeat password")
+                        val toast = Toast.makeText(context,
+                            "Mật khẩu lặp lại không trùng khớp!",
+                            Toast.LENGTH_LONG)
+                        toast.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 0, 0)
+                        toast.show()
                     } else {
-                        auth.createUserWithEmailAndPassword(emailValue, passwordValue)
-                        mainController.navigateUp()
+                        auth.createUserWithEmailAndPassword(emailValue, passwordValue).addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                val toast = Toast.makeText(context,
+                                    "Đăng ký thành công!",
+                                    Toast.LENGTH_LONG)
+                                toast.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 0, 0)
+                                toast.show()
+                                mainController.navigateUp()
+                            } else {
+                                val toast = Toast.makeText(context,
+                                    "Đăng ký không thành công!",
+                                    Toast.LENGTH_LONG)
+                                toast.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 0, 0)
+                                toast.show()
+                                emailValue = ""
+                                passwordValue = ""
+                                passwordRepeatValue = ""
+                            }
+                        }
                     }
                 },
+                enabled = passwordValue != "" && emailValue != "" && passwordRepeatValue != "",
                 shape = customShape,
                 modifier = Modifier.fillMaxWidth(0.7f)
             ) {
                 Text("Register")
             }
-
-            Spacer(modifier = Modifier.padding(8.dp))
-
-            Text(
-                text = "Đã có tài khoản? Đăng nhập",
-                color = Color.Blue,
-                modifier = Modifier.clickable {
-                    mainController.navigateUp()
-                }
-            )
         }
 
 

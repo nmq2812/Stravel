@@ -24,7 +24,7 @@ fun GridItem(it: PlaceItem, navController: NavHostController) {
         modifier = Modifier
             //.fillMaxSize()
             .padding(8.dp)
-            .size(width = 180.dp, height = 250.dp)
+            .size(width = 180.dp, height = 200.dp)
             .clickable{
                 navController.navigate(route = "DetailScreen/$placeId") { // Pass name argument
                 }

@@ -1,6 +1,5 @@
 package com.example.stravel.components
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -41,7 +40,6 @@ lateinit var listOfPlaceItems: MutableList<PlaceItem>
 @Composable
 fun AppNavigation(mainController: NavHostController) {
     listOfPlaceItems = getPlaceItemList()
-    Log.i("tag", listOfPlaceItems.toString())
     val navController = rememberNavController()
     val mainGraph = navController.createGraph(
         startDestination = Screens.HomeScreen.name, // ID của điểm đến bắt đầu
@@ -100,7 +98,7 @@ fun AppNavigation(mainController: NavHostController) {
                                 onClick = {
                                     navController.navigate(navItem.route) {
                                         popUpTo(navController.graph.findStartDestination().id) {
-                                            saveState = true
+                                            saveState = false
                                         }
                                         launchSingleTop = true
                                         restoreState = true
