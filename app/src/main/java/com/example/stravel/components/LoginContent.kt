@@ -218,24 +218,23 @@ fun LoginContent(
 
             Button(
                 onClick = {
-                    auth.signInWithEmailAndPassword(emailValue, passwordValue)
-                    val firebaseAuth = FirebaseAuth.getInstance()
-                    val currentUser = firebaseAuth.currentUser
-                    if (currentUser != null) {
-                        val toast = Toast.makeText(context,
-                            "Đăng nhập thành công!",
-                            Toast.LENGTH_SHORT)
-                        toast.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 0, 0)
-                        toast.show()
-                        mainController.navigateUp()
-                    } else {
-                        val toast = Toast.makeText(context,
-                            "Đăng nhập không thành công!",
-                            Toast.LENGTH_SHORT)
-                        toast.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 0, 0)
-                        toast.show()
-                        emailValue = ""
-                        passwordValue = ""
+                    auth.signInWithEmailAndPassword(emailValue, passwordValue).addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            val toast = Toast.makeText(context,
+                                "Đăng nhập thành công!",
+                                Toast.LENGTH_SHORT)
+                            toast.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 0, 0)
+                            toast.show()
+                            mainController.navigateUp()
+                        } else {
+                            val toast = Toast.makeText(context,
+                                "Đăng nhập không thành công!",
+                                Toast.LENGTH_SHORT)
+                            toast.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 0, 0)
+                            toast.show()
+                            emailValue = ""
+                            passwordValue = ""
+                        }
                     }
                 },
                 enabled = emailValue != "" && passwordValue != "",
