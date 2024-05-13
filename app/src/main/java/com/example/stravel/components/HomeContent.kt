@@ -56,7 +56,7 @@ fun HomeContent(
         columns = GridCells.Fixed(2),
         modifier = Modifier.fillMaxSize()
     ) {
-
+        listOfPlaceItems.distinctBy { it.id }
         listOfPlaceItems.forEach {placeItem ->
             listOfPlaceItems.distinctBy { it.id }
             if (searchValue == "" || placeItem.name!!.lowercase().contains(searchValue.lowercase())) {

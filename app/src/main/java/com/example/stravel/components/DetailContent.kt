@@ -90,7 +90,7 @@ fun DetailContent(pItem: PlaceItem, pValue: PaddingValues) {
                 IconButton(
                     onClick = {
                         isFavou = !isFavou
-                        listOfPlaceItems.remove(pItem)
+                        listOfPlaceItems.removeAll{it.id == pItem.id}
                         Firebase.database.getReference("PlaceItem").child(pItem.name!!).child("favou").setValue(isFavou)
                     },
                     modifier = Modifier
@@ -200,6 +200,7 @@ fun ReviewContent(
                     Box (
                         modifier = Modifier
                             .clickable {
+                                listOfPlaceItems.removeAll{it.id == pItem.id}
                                 starScore = i.toLong()
                                 onRatingChange(i.toLong())
                                 data?.setValue(starScore)
