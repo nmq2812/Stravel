@@ -6,5 +6,5 @@ enum class Screens {
     SettingScreen,
     AccountScreen,
     DetailScreen,
-    LoginScreen
+    PaymentScreen
 }

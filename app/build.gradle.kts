@@ -88,4 +88,5 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-database")
     testImplementation("io.mockk:mockk:1.13.10")
+    implementation("androidx.preference:preference-ktx:1.2.0")
 }

@@ -3,7 +3,6 @@ package com.example.stravel.components
 import androidx.compose.runtime.Composable
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.Exclude
 import com.google.firebase.database.IgnoreExtraProperties
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.getValue
@@ -18,20 +17,15 @@ data class PlaceItem(
     val description: String? = "",
     var score: Long? = 0,
     var favou: Boolean = false,
-) {
-    @Exclude
-    fun toMap(): Map<String, Any?> {
-        return mapOf(
-            "name" to name,
-            "id" to id,
-            "image" to image,
-            "description" to description,
-            "score" to score,
-            "favou" to favou
-        )
-    }
-}
+    var comments: Comments? = Comments("test 1", "test 2"),
+    var cost: Long? = 0
+)
 
+data class Comments(
+    var cmt_1: String = "",
+    var cmt_2: String = ""
+) {
+}
 @Composable
 fun getPlaceItemList() : MutableList<PlaceItem> {
     val database = Firebase.database.getReference("PlaceItem")
@@ -42,6 +36,7 @@ fun getPlaceItemList() : MutableList<PlaceItem> {
                 val pItem = pItemSnapshot.getValue<PlaceItem>()
                 if (pItem != null && !placeItems.contains(pItem)) {
                     placeItems.add(pItem)
+                    println(pItem.comments)
                 }
             }
             placeItems.sortBy { it.id }
@@ -52,6 +47,7 @@ fun getPlaceItemList() : MutableList<PlaceItem> {
         }
     }
     database.addValueEventListener(dataListener)
+    println(placeItems)
     return placeItems
 }
 

@@ -35,7 +35,6 @@ fun GridItem(it: PlaceItem, navController: NavHostController) {
             contentDescription = it.name,
             modifier = Modifier
                 .fillMaxWidth()
-                //.size(width = 150.dp, height = 150.dp)
                 .clip(shape = RoundedCornerShape(18.dp))
                 .align(Alignment.CenterHorizontally)
         )

@@ -48,7 +48,8 @@ fun AppNavigation(mainController: NavHostController) {
         composable(Screens.HomeScreen.name) { HomeScreen(navController, listOfPlaceItems) }
         composable(Screens.FavouriteScreen.name) { FavouriteScreen(navController, listOfPlaceItems) }
         composable(Screens.SettingScreen.name) { SettingScreen(navController) }
-        composable(Screens.AccountScreen.name) { AccountScreen(mainController) }
+        composable(Screens.AccountScreen.name) { AccountScreen(mainController, navController) }
+
         composable(
             route = Screens.DetailScreen.name + "/{placeId}",
             arguments = listOf(
