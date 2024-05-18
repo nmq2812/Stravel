@@ -21,6 +21,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.Button
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -35,7 +36,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -60,10 +60,10 @@ fun AccountScreen(mainController: NavController, navController: NavHostControlle
 @Composable
 fun AccountContent(mainController: NavController, navController: NavHostController) {
     var currentUser by remember { mutableStateOf(Firebase.auth.currentUser) }
-    var imageValue = rememberSaveable {
+    val imageValue = rememberSaveable {
         mutableStateOf("")
     }
-    var painter = rememberImagePainter(
+    val painter = rememberImagePainter(
         if (imageValue.value.isEmpty()) {
             R.drawable.avatar
         } else {
@@ -73,7 +73,7 @@ fun AccountContent(mainController: NavController, navController: NavHostControll
     var state by remember {
         mutableStateOf(true)
     }
-    var laucher = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) {uri: Uri? ->
+    val laucher = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri: Uri? ->
         uri.let {imageValue.value = it.toString()}
     }
     Scaffold (
@@ -94,138 +94,150 @@ fun AccountContent(mainController: NavController, navController: NavHostControll
                         )
                 )
             }
-        }
-    ) {
-        if (currentUser != null) {
-            LazyColumn(
-                modifier = Modifier
-
-                    .fillMaxSize(),
-                verticalArrangement = Arrangement.Top,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                item (1) {
-                    Image(
-                        painter = painter,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .clip(shape = CircleShape)
-                            .padding(16.dp)
-                            .size(64.dp)
-                            .clickable { laucher.launch("image/*") }
-                    )
-                }
-
-                item (2) {
-                    val user = Firebase.auth.currentUser
-                    user?.let {
-                        // Name, email address, and profile photo Url
-                        var name = it.displayName
-                        val email = it.email
-                        val uid = it.uid
-
-                        if (name!!.isEmpty()) {
-                            name = "Nguyễn Minh Quân"
-                        }
-
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween,
+        },
+        content = {
+            if (currentUser != null) {
+                LazyColumn(
+                    modifier = Modifier
+                        .padding(it)
+                        .fillMaxSize(),
+                    verticalArrangement = Arrangement.Top,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    item (1) {
+                        Image(
+                            painter = painter,
+                            contentDescription = null,
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .border(1.dp, Color.Gray, RectangleShape)
-                                .padding(8.dp)
+                                .padding(16.dp)
+                                .size(128.dp)
+                                .clickable { laucher.launch("image/*") }
+                                .clip(shape = CircleShape)
+                        )
+                    }
+
+                    item (2) {
+                        val user = Firebase.auth.currentUser
+                        user?.let {
+                            // Name, email address, and profile photo Url
+                            var name = "Nguyễn Minh Quân"
+                            val email = it.email
+                            val uid = it.uid
+
+                            ElevatedCard (
+                                modifier = Modifier.padding(4.dp)
+                            ) {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(8.dp)
+                                ) {
+                                    Text(
+                                        "UID: ",
+                                        fontSize = 12.sp
+                                    )
+                                    Text(
+                                        uid,
+                                        fontSize = 12.sp
+                                    )
+                                }
+                            }
+
+                            ElevatedCard(
+                                modifier = Modifier.padding(4.dp)
+
+                            ) {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(8.dp)
+                                ) {
+                                    Text(
+                                        "Tên tài khoản:: ",
+                                        fontSize = 12.sp
+                                    )
+                                    Text(
+                                        name,
+                                        fontSize = 12.sp
+                                    )
+                                }
+                            }
+
+                            ElevatedCard(
+                                modifier = Modifier.padding(4.dp)
+
+                            ) {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(8.dp)
+                                ) {
+                                    Text(
+                                        text = "Email: ",
+                                        fontSize = 12.sp
+                                    )
+                                    if (email != null) {
+                                        Text(
+                                            text = email,
+                                            fontSize = 12.sp
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    item(3) {
+                        ElevatedCard(
+                            modifier = Modifier.padding(4.dp)
+
                         ) {
-                            Text(
-                                "UID: ",
-                                fontSize = 12.sp
-                            )
-                            Text(
-                                "$uid",
-                                fontSize = 12.sp
-                            )
-                        }
-
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .border(1.dp, Color.Gray, RectangleShape)
-                                .padding(8.dp)
-                        ) {
-                            Text(
-                                "Tên tài khoản:: ",
-                                fontSize = 12.sp
-                            )
-                            Text(
-                                "$name",
-                                fontSize = 12.sp
-                            )
-                        }
-
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .border(1.dp, Color.Gray, RectangleShape)
-                                .padding(8.dp)
-                        )  {
-                            Text(
-                                text = "Email: ",
-                                fontSize = 12.sp
-                            )
-                            if (email != null) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(8.dp)
+                                    .clickable { navController.navigate((Screens.FavouriteScreen.name)) }
+                            ) {
                                 Text(
-                                    text = "$email",
+                                    "Danh sách yêu thích: ",
                                     fontSize = 12.sp
+                                )
+                                Icon(
+                                    Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                                    contentDescription = null
                                 )
                             }
                         }
                     }
-                }
 
-                item(3) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .border(1.dp, Color.Gray, RectangleShape)
-                            .padding(8.dp)
-                            .clickable { navController.navigate((Screens.FavouriteScreen.name)) }
-                    ) {
-                        Text(
-                            "Danh sách yêu thích: ",
-                            fontSize = 12.sp
-                        )
-                        Icon(
-                            Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                            contentDescription = null
-                        )
+                    item (4) {
+                        Button(
+                            onClick = {
+                                Firebase.auth.signOut()
+                                currentUser = null
+                                state = !state
+                            },
+                            modifier = Modifier.padding(it)
+                        ) {
+                            Text(text = "Đăng xuất")
+                        }
                     }
                 }
 
-                item (4) {
-                    Button(
-                        onClick = {
-                            Firebase.auth.signOut()
-                            currentUser = null
-                            state = !state
-                        },
-                        modifier = Modifier.padding(it)
-                    ) {
-                        Text(text = "Đăng xuất")
-                    }
-                }
+            } else {
+                NotLoggedContent(mainController)
             }
 
-        } else {
-            NotLoggedContent(mainController)
         }
-
-    }
+    )
 
 }
 

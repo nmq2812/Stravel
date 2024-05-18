@@ -18,7 +18,8 @@ data class PlaceItem(
     var score: Long? = 0,
     var favou: Boolean = false,
     var comments: Comments? = Comments("test 1", "test 2"),
-    var cost: Long? = 0
+    var cost: Long? = 0,
+    var avgScore: Long? = 0
 )
 
 data class Comments(
@@ -36,7 +37,6 @@ fun getPlaceItemList() : MutableList<PlaceItem> {
                 val pItem = pItemSnapshot.getValue<PlaceItem>()
                 if (pItem != null && !placeItems.contains(pItem)) {
                     placeItems.add(pItem)
-                    println(pItem.comments)
                 }
             }
             placeItems.sortBy { it.id }

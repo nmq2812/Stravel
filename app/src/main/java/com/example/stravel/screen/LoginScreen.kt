@@ -15,12 +15,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Email
 import androidx.compose.material.icons.rounded.Lock
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -74,6 +76,10 @@ fun LoginContent(
     var isHidePassword by remember {
         mutableStateOf(true)
     }
+    var showDialog by remember {
+        mutableStateOf(false)
+    }
+
 
     Box(
         modifier = Modifier
@@ -219,7 +225,7 @@ fun LoginContent(
                     color = Color.Blue,
                     modifier = Modifier
                         .clickable {
-
+                            showDialog = true
                         }
                 )
             }
@@ -271,6 +277,95 @@ fun LoginContent(
             )
 
         }
-
     }
+
+    Row (
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
+    ) {
+        if (showDialog) {
+            AlertDialog(
+                onDismissRequest = { showDialog = false },
+                title = {
+                    Text(
+                        text = "Quên mật khẩu",
+                    )
+                },
+                text = {
+                    LazyColumn (
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        item(1) {
+                            OutlinedTextField (
+                                value = emailValue,
+                                onValueChange = { emailValue = it },
+                                placeholder = {
+                                    Row {
+                                        Text("Nhập Email")
+                                    }
+                                },
+                                label = { Text(text = "Email") },
+                                leadingIcon = { Icon(Icons.Rounded.Email, contentDescription = null, tint = CardColor) },
+                                shape = RoundedCornerShape(16.dp),
+                                keyboardOptions = KeyboardOptions(
+                                    keyboardType = KeyboardType.Email,
+                                    imeAction = ImeAction.Next
+                                ),
+                                keyboardActions = KeyboardActions(
+                                    onNext = {
+                                        passwordFocusRequester.requestFocus()
+                                    }
+                                ),
+                                colors = OutlinedTextFieldDefaults.colors(
+                                    focusedBorderColor = CardColor,
+                                    unfocusedBorderColor = CardColor
+                                ),
+                                modifier = Modifier
+                                    .background(color = Color.Transparent)
+                                    .fillMaxWidth()
+                                    .focusRequester(emailFocusRequester)
+                            )
+                        }
+                    }
+                },
+                confirmButton = {
+                    Button(
+                        onClick = {
+                            if (emailValue != "") {
+                                val toast = Toast.makeText(context,
+                                    "Đã gửi mật khẩu về Email của bạn!",
+                                    Toast.LENGTH_SHORT)
+                                toast.setGravity(Gravity.TOP , 0, 0)
+                                toast.show()
+                                showDialog = false
+                            } else {
+                                val toast = Toast.makeText(context,
+                                    "Vui lòng nhập Email",
+                                    Toast.LENGTH_SHORT)
+                                toast.setGravity(Gravity.TOP, 0, 0)
+                                toast.show()
+                            }
+
+                        },
+                        content = {
+                            Text(text = "OK")
+                        }
+                    )
+                },
+                dismissButton = {
+                    Button(
+                        onClick = {
+                            showDialog = false
+                        },
+                        content = {
+                            Text(text = "Hủy")
+                        }
+                    )
+                },
+                modifier = Modifier
+            )
+        }
+    }
+
+
 }

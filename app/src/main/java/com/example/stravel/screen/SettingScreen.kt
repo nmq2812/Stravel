@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -25,10 +24,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.example.stravel.R
 
 @Composable
 fun SettingScreen(navController: NavHostController) {
@@ -42,17 +39,6 @@ fun SettingScreen(navController: NavHostController) {
                 IconButton(onClick = {navController.navigateUp()}) {
                     Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null)
                 }
-                Row(
-                    horizontalArrangement = Arrangement.End
-                ) {
-                    IconButton(onClick = {}) {
-                        Icon(painterResource(id = R.drawable.heart_24_outline), contentDescription = null)
-                    }
-                    IconButton(onClick = {}) {
-                        Icon(Icons.Default.Share, contentDescription = null)
-                    }
-                }
-
             }
         },
         content = {

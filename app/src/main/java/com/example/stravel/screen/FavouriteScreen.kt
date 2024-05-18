@@ -93,11 +93,11 @@ fun FavouriteContent(navController: NavHostController, listOfPlaceItems: Mutable
                                 }
                             )
                         },
-                        modifier = Modifier.height(500.dp)
+                        modifier = Modifier.height(400.dp)
                     )
                 }
 
-                IconButton(onClick = { /*TODO*/ }) {
+                IconButton(onClick = { navController.navigate(Screens.SettingScreen.name) }) {
                     Icon(Icons.Rounded.Settings, contentDescription = null)
                 }
                 Spacer(
@@ -119,15 +119,14 @@ fun FavouriteContent(navController: NavHostController, listOfPlaceItems: Mutable
                     .padding(it)
             ) {
                 updateSurface = !updateSurface
-                if (listOfPlaceItems != null) {
-                    listOfPlaceItems.filter{it.favou}.forEach {placeItem ->
+                listOfPlaceItems!!.sortedBy { it.score }
+                listOfPlaceItems.filter{it.favou}.forEach {placeItem ->
                         items(1) {
                             Box(modifier = Modifier.fillMaxHeight()) {
                                 GridItem(placeItem, navController)
                             }
                         }
                     }
-                }
             }
         }
     )

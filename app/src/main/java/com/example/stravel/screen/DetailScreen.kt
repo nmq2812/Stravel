@@ -6,9 +6,7 @@ import android.widget.Toast
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.animateScrollBy
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,26 +21,21 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Share
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardColors
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -65,7 +58,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.LineBreak
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -76,6 +68,7 @@ import com.example.stravel.R
 import com.example.stravel.components.PlaceItem
 import com.example.stravel.components.listOfPlaceItems
 import com.example.stravel.ui.theme.CardColor
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -103,21 +96,13 @@ fun DetailScreen(
                 IconButton(onClick = {navController.navigateUp()}) {
                     Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null)
                 }
-                Row(
-                    horizontalArrangement = Arrangement.End
-                ) {
-                    IconButton(onClick = {}) {
-                        Icon(Icons.Default.Share, contentDescription = null)
-                    }
-                }
-
             }
 
         },
         modifier = Modifier.fillMaxSize()
     ) { paddingValues ->
         if (pItem != null) {
-            DetailContent(pItem,paddingValues, listOfPlaceItems)
+            DetailContent(pItem,paddingValues, navController)
         }
     }
 }
@@ -128,21 +113,14 @@ fun DetailScreen(
 fun DetailContent(
     pItem: PlaceItem,
     pValue: PaddingValues,
-    listOfPlaceItems: MutableList<PlaceItem>
+    navController: NavHostController
 ) {
-    val context  = LocalContext.current
+
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
-    var showDialog by remember { mutableStateOf(false) }
-    var cardNumValue by remember {
-        mutableStateOf("")
-    }
-    var dateValue by remember {
-        mutableStateOf("")
-    }
-    var cvvValue by remember {
-        mutableStateOf("")
-    }
+    val context  = LocalContext.current
+    val currentUser by remember { mutableStateOf(Firebase.auth.currentUser) }
+
     LazyColumn(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -154,6 +132,7 @@ fun DetailContent(
                 Text(
                     text = it.uppercase(),
                     style = TextStyle(fontSize = 36.sp),
+                    textAlign = TextAlign.Center,
                     modifier = Modifier
                         .padding(8.dp)
 
@@ -184,7 +163,7 @@ fun DetailContent(
                 IconButton(
                     onClick = {
                         isFavou = !isFavou
-                        com.example.stravel.components.listOfPlaceItems.removeAll{it.id == pItem.id}
+                        listOfPlaceItems.removeAll{it.id == pItem.id}
                         Firebase.database.getReference("PlaceItem").child(pItem.name!!).child("favou").setValue(isFavou)
                     },
                     modifier = Modifier
@@ -232,8 +211,12 @@ fun DetailContent(
             Row (
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.End
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
+                Text(
+                    text = "Đánh giá: ${pItem.avgScore}/5",
+                    fontStyle = FontStyle.Italic
+                )
                 Text(
                     text = "Giá vé: ${pItem.cost} vnđ",
                     fontStyle = FontStyle.Italic
@@ -243,7 +226,15 @@ fun DetailContent(
         item(5) {
             Button(
                 onClick = {
-                          showDialog = true
+                    if (currentUser != null) {
+                        navController.navigate(Screens.PaymentScreen.name + "/${pItem.id}")
+                    } else {
+                        val toast = Toast.makeText(context,
+                            "Bạn chưa đăng nhập!",
+                            Toast.LENGTH_SHORT)
+                        toast.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 0, 0)
+                        toast.show()
+                    }
                 },
                 shape = ButtonDefaults.shape,
                 colors = ButtonColors(
@@ -256,55 +247,6 @@ fun DetailContent(
             ) {
                 Text(
                     text = "Đặt vé"
-                )
-            }
-
-            if (showDialog) {
-                AlertDialog(
-                    onDismissRequest = { showDialog = false },
-                    title = {
-                        Text(
-                            text = "Đặt vé ${pItem.name}"
-                        )
-                    },
-                    text = {
-                        PaymentScreen(pItem, listOfPlaceItems, cardNumValue, dateValue, cvvValue)
-                    },
-                    confirmButton = {
-                        Button(
-                            onClick = {
-                                if (cardNumValue == "" || dateValue == "" || cvvValue == "") {
-                                    val toast = Toast.makeText(context,
-                                        "Thông tin thẻ không đủ!",
-                                        Toast.LENGTH_SHORT)
-                                    toast.setGravity(Gravity.TOP, 0, 0)
-                                    toast.show()
-                                } else {
-                                    showDialog = false
-                                }
-                            },
-
-                            modifier = Modifier.padding(end = 8.dp),
-                            content = {
-                                Text(text = "Thanh toán")
-                            }
-                        )
-                    },
-                    dismissButton = {
-                        Button(
-                            onClick = {
-                                showDialog = false
-                                //updateSurface = !updateSurface
-                            },
-
-                            modifier = Modifier
-                                .padding(end = 8.dp),
-                            content = {
-                                Text(text = "Hủy")
-                            }
-                        )
-                    }
-                    //modifier = Modifier.height(500.dp)
                 )
             }
         }
@@ -366,7 +308,7 @@ fun ReviewContent(
     val data = pItem.name?.let { Firebase.database.getReference("PlaceItem").child(it).child("score") }
     val dataListener = object : ValueEventListener {
         override fun onDataChange(snapshot: DataSnapshot) {
-            starScore = snapshot.value as Long
+            starScore = snapshot.value!! as Long
         }
 
         override fun onCancelled(error: DatabaseError) {
@@ -386,7 +328,7 @@ fun ReviewContent(
             modifier = Modifier.padding(top = 4.dp, bottom = 8.dp)
         )
         Text(
-            text = "Điểm đánh giá:",
+            text = "Điểm đánh giá của bạn:",
             modifier = Modifier
         )
         LazyRow(
@@ -520,115 +462,8 @@ fun CommentItem(comment: Comment) {
 
 
 data class Comment(val author: String, val text: String)
-
-@Composable
-fun PaymentScreen(
-    pItem: PlaceItem,
-    listOfPlaceItems: MutableList<PlaceItem>,
-    cardNumValue: String,
-    dateValue: String,
-    cvvValue: String
-) {
-    val tour: MutableList<PlaceItem> = getRandomElements(listOfPlaceItems, 2, pItem)
-    tour.add(pItem)
-    var totalCost = pItem.cost
-    var enableTour by remember {
-        mutableStateOf(false)
-    }
-    Column(
-        modifier = Modifier
-            .padding(16.dp)
-            .scrollable(rememberScrollState(), orientation = Orientation.Vertical)
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(text = "Đề xuất tour:", modifier = Modifier.padding(16.dp))
-            Switch(
-                checked = enableTour,
-                onCheckedChange = { enableTour = it },
-                modifier = Modifier.padding(horizontal = 16.dp)
-            )
-        }
-        if (enableTour) {
-            totalCost = 0
-            Column(
-                modifier = Modifier
-                    .padding(top = 8.dp)
-                    .fillMaxWidth(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                tour.forEach { item ->
-                    Card(
-                        content = {
-                            Text(
-                                text = "${item.name}",
-                                fontStyle = FontStyle.Italic,
-                                textDecoration = TextDecoration.Underline,
-                                modifier = Modifier.padding(4.dp)
-                            )
-                        },
-                        colors = CardColors(
-                            contentColor = Color.Black,
-                            containerColor = Color.Transparent,
-                            disabledContentColor = Color.Transparent,
-                            disabledContainerColor = Color.Transparent
-                        ),
-                        modifier = Modifier
-
-                            .padding(4.dp)
-                    )
-                    totalCost = totalCost!! + item.cost!!
-                }
-            }
-        }
-
-
-        Text(
-            "Giá vé: ${totalCost}",
-            modifier = Modifier
-                .align(Alignment.End)
-                .padding(8.dp)
-        )
-        // Card number field
-        OutlinedTextField(
-            value = cardNumValue, // Replace with actual card number state
-            onValueChange = {}, // Replace with actual card number update logic
-            label = { Text("Card number") },
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        // Expiration date field
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            OutlinedTextField(
-                value = dateValue, // Replace with actual expiration date state
-                onValueChange = {}, // Replace with actual expiration date update logic
-                label = { Text("MM/YY") },
-                modifier = Modifier.weight(1f)
-            )
-
-            // CVV field
-            OutlinedTextField(
-                value = cvvValue, // Replace with actual CVV state
-                onValueChange = {}, // Replace with actual CVV update logic
-                label = { Text("CVV") },
-                modifier = Modifier.weight(1f)
-            )
-        }
-
-
-    }
-}
-
 fun getRandomElements(list: MutableList<PlaceItem>, count: Int, pItem: PlaceItem): MutableList<PlaceItem> {
     val filteredList:MutableList<PlaceItem> = list.filter { it != pItem }.toMutableList()
     filteredList.shuffle()
-
-
     return filteredList.take(count).toMutableList()
 }

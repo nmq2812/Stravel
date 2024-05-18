@@ -4,6 +4,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -13,7 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -31,6 +32,7 @@ import com.example.stravel.screen.AccountScreen
 import com.example.stravel.screen.DetailScreen
 import com.example.stravel.screen.FavouriteScreen
 import com.example.stravel.screen.HomeScreen
+import com.example.stravel.screen.PaymentScreen
 import com.example.stravel.screen.Screens
 import com.example.stravel.screen.SettingScreen
 import com.example.stravel.ui.theme.CardColor
@@ -51,6 +53,16 @@ fun AppNavigation(mainController: NavHostController) {
         composable(Screens.AccountScreen.name) { AccountScreen(mainController, navController) }
 
         composable(
+            route = Screens.PaymentScreen.name + "/{placeId}",
+            arguments = listOf(
+                navArgument(name = "placeId") {
+                    type = NavType.IntType
+                }
+            )
+        ) {
+            PaymentScreen(navController, it, listOfPlaceItems)
+        }
+        composable(
             route = Screens.DetailScreen.name + "/{placeId}",
             arguments = listOf(
                 navArgument(name = "placeId") {
@@ -62,23 +74,24 @@ fun AppNavigation(mainController: NavHostController) {
         }
     }
     Scaffold (
+        containerColor = Color.Transparent,
         modifier = Modifier
             .background(color = Color.Transparent)
             .padding(8.dp),
         bottomBar = {
             val mainColor = CardColor
-            NavigationBar(
-                containerColor = Color.Transparent,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color.Transparent)
-                    .padding(bottom = 8.dp)
-                    .clip(RoundedCornerShape(100.dp))
-                    .shadow(
-                        elevation = 3.dp,
-                        shape = RoundedCornerShape(100.dp),
-                        spotColor = mainColor
-                    ),
+            ElevatedCard(
+                elevation = CardDefaults.cardElevation(
+                    defaultElevation = 16.dp
+                ),
+                modifier = Modifier.clip(RoundedCornerShape(100.dp))
+            ) {
+                NavigationBar(
+                    containerColor = Color.Transparent,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Color.Transparent)
+                        .padding(bottom = 8.dp, top = 4.dp),
                     content = {
                         val navBackStackEntry by navController.currentBackStackEntryAsState()
                         val currentDestination = navBackStackEntry?.destination
@@ -115,7 +128,9 @@ fun AppNavigation(mainController: NavHostController) {
                             )
                         }
                     }
-            )
+                )
+            }
+
         }
     ) { paddingValues ->
         NavHost(

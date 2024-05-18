@@ -230,7 +230,7 @@ fun HomeContent(
                     },
                     onClick = {
                         expandedSort = false
-                        pItems = pItems.sortedBy { it.score }.toMutableList()
+                        pItems = pItems.sortedBy { it.avgScore }.toMutableList()
                         pItems.reverse()
                     }
                 )
@@ -240,7 +240,7 @@ fun HomeContent(
                     },
                     onClick = {
                         expandedSort = false
-                        pItems = pItems.sortedBy { it.score }.toMutableList()
+                        pItems = pItems.sortedBy { it.avgScore }.toMutableList()
                     }
                 )
                 DropdownMenuItem(
