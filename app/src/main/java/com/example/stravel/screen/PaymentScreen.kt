@@ -17,8 +17,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
@@ -41,6 +43,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
@@ -72,6 +76,7 @@ fun PaymentScreen(navController: NavHostController, backStateEntry: NavBackStack
     var cvvValue by remember {
         mutableStateOf("")
     }
+    var showDialog by remember { mutableStateOf(false) }
 
     Scaffold (
         topBar = {
@@ -210,6 +215,10 @@ fun PaymentScreen(navController: NavHostController, backStateEntry: NavBackStack
                         value = cardNumValue, // Replace with actual card number state
                         onValueChange = {cardNumValue = it}, // Replace with actual card number update logic
                         label = { Text("Card number") },
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Password,
+                            imeAction = ImeAction.Done
+                        ),
                         modifier = Modifier.fillMaxWidth()
                     )
 
@@ -222,6 +231,10 @@ fun PaymentScreen(navController: NavHostController, backStateEntry: NavBackStack
                             value = dateValue, // Replace with actual expiration date state
                             onValueChange = {dateValue = it}, // Replace with actual expiration date update logic
                             label = { Text("MM/YY") },
+                            keyboardOptions = KeyboardOptions(
+                                keyboardType = KeyboardType.Password,
+                                imeAction = ImeAction.Done
+                            ),
                             modifier = Modifier.weight(1f)
                         )
 
@@ -230,6 +243,10 @@ fun PaymentScreen(navController: NavHostController, backStateEntry: NavBackStack
                             value = cvvValue, // Replace with actual CVV state
                             onValueChange = {cvvValue = it}, // Replace with actual CVV update logic
                             label = { Text("CVV") },
+                            keyboardOptions = KeyboardOptions(
+                                keyboardType = KeyboardType.Password,
+                                imeAction = ImeAction.Done
+                            ),
                             modifier = Modifier.weight(1f)
                         )
                     }
@@ -245,12 +262,7 @@ fun PaymentScreen(navController: NavHostController, backStateEntry: NavBackStack
                                 toast.setGravity(Gravity.TOP, 0, 0)
                                 toast.show()
                             } else {
-                                val toast = Toast.makeText(context,
-                                    "Thông tin thẻ không đủ!",
-                                    Toast.LENGTH_SHORT)
-                                toast.setGravity(Gravity.TOP, 0, 0)
-                                toast.show()
-                                navController.navigateUp()
+                                showDialog = true
                             }
                         },
 
@@ -262,13 +274,37 @@ fun PaymentScreen(navController: NavHostController, backStateEntry: NavBackStack
                         }
                     )
                 }
-
-
             }
         }
 
     )
 
-
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = {
+                showDialog = false
+                navController.navigateUp()
+            },
+            title = { Text(text = "Thanh toán thành công!") },
+            text = {
+                Text(
+                    text = "Vé đã được gửi về Email của bạn"
+                )
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        showDialog = false
+                        navController.navigateUp()
+                    },
+                    modifier = Modifier.padding(end = 8.dp),
+                    content = {
+                        Text(text = "OK")
+                    }
+                )
+            },
+            modifier = Modifier
+        )
+    }
 
 }
