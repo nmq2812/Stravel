@@ -66,7 +66,6 @@ import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.example.stravel.R
 import com.example.stravel.components.PlaceItem
-import com.example.stravel.components.listOfPlaceItems
 import com.example.stravel.ui.theme.CardColor
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
@@ -102,7 +101,7 @@ fun DetailScreen(
         modifier = Modifier.fillMaxSize()
     ) { paddingValues ->
         if (pItem != null) {
-            DetailContent(pItem,paddingValues, navController)
+            DetailContent(pItem,paddingValues, navController, listOfPlaceItems)
         }
     }
 }
@@ -113,7 +112,8 @@ fun DetailScreen(
 fun DetailContent(
     pItem: PlaceItem,
     pValue: PaddingValues,
-    navController: NavHostController
+    navController: NavHostController,
+    listOfPlaceItems: MutableList<PlaceItem>
 ) {
 
     val listState = rememberLazyListState()
@@ -269,7 +269,8 @@ fun DetailContent(
             Spacer(modifier = Modifier.padding(4.dp))
             ReviewContent(
                 pItem,
-                pItem.score!!
+                pItem.score!!,
+                listOfPlaceItems
             ) { newRating ->
                 pItem.score = newRating
             }
@@ -302,6 +303,7 @@ fun DetailContent(
 fun ReviewContent(
     pItem: PlaceItem,
     score: Long,
+    listOfPlaceItems: MutableList<PlaceItem>,
     onRatingChange: (Long) -> Unit
 ) {
     var starScore by remember { mutableLongStateOf(score) }

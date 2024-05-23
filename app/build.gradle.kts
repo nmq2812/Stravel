@@ -62,7 +62,6 @@ android {
 dependencies {
     implementation("androidx.navigation:navigation-compose:2.7.7")
     implementation(libs.androidx.core.ktx)
-    implementation("androidx.compose.material3:material3:1.2.1")
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
@@ -89,4 +88,5 @@ dependencies {
     implementation("com.google.firebase:firebase-database")
     testImplementation("io.mockk:mockk:1.13.10")
     implementation("androidx.preference:preference-ktx:1.2.0")
+    implementation("androidx.compose.material3:material3:1.3.0-alpha06")
 }

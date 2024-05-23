@@ -1,6 +1,7 @@
 package com.example.stravel.screen
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -38,15 +39,16 @@ import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.example.stravel.components.GridItem
 import com.example.stravel.components.PlaceItem
-import com.example.stravel.components.listOfPlaceItems
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
 @Composable
 fun FavouriteScreen(navController: NavHostController, listOfPlaceItems: MutableList<PlaceItem>) {
-    Box(modifier = Modifier
-        .fillMaxSize()
-        ,contentAlignment = Alignment.Center
+    Box(
+        modifier = Modifier
+            .fillMaxSize(),
+        contentAlignment = Alignment.Center
+
     ) {
         FavouriteContent(navController, listOfPlaceItems)
     }
@@ -60,9 +62,12 @@ fun FavouriteContent(navController: NavHostController, listOfPlaceItems: Mutable
     }
 
     Scaffold (
+        containerColor = Color.Transparent,
         topBar = {
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.Transparent),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.End
             ) {
@@ -77,7 +82,7 @@ fun FavouriteContent(navController: NavHostController, listOfPlaceItems: Mutable
                         text = {
                             LazyColumn {
                                 item(1) {
-                                    ShowPlaceItem()
+                                    ShowPlaceItem(listOfPlaceItems)
                                 }
                             }
                         },
@@ -117,6 +122,7 @@ fun FavouriteContent(navController: NavHostController, listOfPlaceItems: Mutable
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(it)
+                    .background(Color.Transparent)
             ) {
                 updateSurface = !updateSurface
                 listOfPlaceItems!!.sortedBy { it.score }
@@ -134,8 +140,8 @@ fun FavouriteContent(navController: NavHostController, listOfPlaceItems: Mutable
 }
 
 @Composable
-fun ShowPlaceItem() {
-    listOfPlaceItems.forEach { pItem ->
+fun ShowPlaceItem(listOfPlaceItems: MutableList<PlaceItem>?) {
+    listOfPlaceItems?.forEach { pItem ->
         val checkedState = remember { mutableStateOf(pItem.favou) }
         LazyRow (
             verticalAlignment = Alignment.CenterVertically

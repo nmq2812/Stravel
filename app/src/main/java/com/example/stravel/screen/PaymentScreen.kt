@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -24,8 +25,13 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
@@ -55,6 +61,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.stravel.components.PlaceItem
 import com.example.stravel.ui.theme.CardColor
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PaymentScreen(navController: NavHostController, backStateEntry: NavBackStackEntry, listOfPlaceItems: MutableList<PlaceItem>) {
     val context  = LocalContext.current
@@ -63,7 +70,9 @@ fun PaymentScreen(navController: NavHostController, backStateEntry: NavBackStack
     val pItem: PlaceItem = listOfPlaceItems.find { it.id?.toInt() == placeId }!!
     val tour: MutableList<PlaceItem> = getRandomElements(listOfPlaceItems, 2, pItem)
     tour.add(pItem)
-    var totalCost = pItem.cost
+    var totalCost by remember {
+        mutableStateOf(pItem.cost)
+    }
     var enableTour by remember {
         mutableStateOf(false)
     }
@@ -77,6 +86,14 @@ fun PaymentScreen(navController: NavHostController, backStateEntry: NavBackStack
         mutableStateOf("")
     }
     var showDialog by remember { mutableStateOf(false) }
+    var expanded by remember {
+        mutableStateOf(false)
+    }
+    val options = listOf("Thẻ Visa")
+    var selectedText by remember {
+        mutableStateOf(options[0])
+    }
+
 
     Scaffold (
         topBar = {
@@ -134,10 +151,16 @@ fun PaymentScreen(navController: NavHostController, backStateEntry: NavBackStack
                         Text(text = "Đề xuất tour:", modifier = Modifier.padding(16.dp))
                         Switch(
                             checked = enableTour,
-                            onCheckedChange = { enableTour = it },
+                            onCheckedChange = {
+                                enableTour = it
+                                if (!enableTour) {
+                                    totalCost = pItem.cost
+                                }
+                            },
                             modifier = Modifier.padding(horizontal = 16.dp)
                         )
                     }
+
                     if (enableTour) {
                         totalCost = 0
                         Column(
@@ -170,7 +193,7 @@ fun PaymentScreen(navController: NavHostController, backStateEntry: NavBackStack
                                                 )
                                             }
                                             Text(
-                                                text = "${item.name}",
+                                                text = "${item.name}: ${item.cost}vnđ",
                                                 fontStyle = FontStyle.Italic,
                                                 textDecoration = TextDecoration.Underline,
                                                 modifier = Modifier.padding(4.dp)
@@ -202,10 +225,56 @@ fun PaymentScreen(navController: NavHostController, backStateEntry: NavBackStack
                         modifier = Modifier.fillMaxWidth()
                     ){
                         Text(
-                            "Giá vé: ${totalCost}",
+                            "Giá vé: ${totalCost}vnđ",
+                            fontStyle = FontStyle.Italic,
+                            fontWeight = FontWeight.Bold,
                             modifier = Modifier
-                                .padding(8.dp)
+                                .padding(top = 32.dp, bottom = 32.dp)
                         )
+                    }
+
+                }
+                item {
+                    Row (
+                        horizontalArrangement = Arrangement.Start,
+                        modifier = Modifier.fillMaxWidth()
+                    ){
+                        ExposedDropdownMenuBox(
+                            expanded = expanded,
+                            onExpandedChange = {
+                                expanded = !expanded
+                            },
+                            modifier = Modifier.width(200.dp)
+                        ) {
+                            OutlinedTextField(
+                                value = selectedText,
+                                label = {Text("Phương thức thanh toán")},
+                                onValueChange = {},
+                                readOnly = true,
+                                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                                modifier = Modifier
+                                    .menuAnchor(MenuAnchorType.PrimaryNotEditable)
+                            )
+                            ExposedDropdownMenu(
+                                expanded = expanded,
+                                onDismissRequest = { expanded = false }
+                            ) {
+                                options.forEach {option ->
+                                    DropdownMenuItem(
+                                        text = {
+                                            Text(text = option)
+                                        },
+                                        onClick = {
+                                            selectedText = option
+                                            expanded = false
+                                        },
+                                        contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
+                                    )
+                                }
+
+                            }
+                        }
+                        
                     }
 
                 }

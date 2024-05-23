@@ -77,6 +77,7 @@ fun AccountContent(mainController: NavController, navController: NavHostControll
         uri.let {imageValue.value = it.toString()}
     }
     Scaffold (
+        containerColor = Color.Transparent,
         topBar = {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -120,7 +121,6 @@ fun AccountContent(mainController: NavController, navController: NavHostControll
                         val user = Firebase.auth.currentUser
                         user?.let {
                             // Name, email address, and profile photo Url
-                            var name = "Nguyễn Minh Quân"
                             val email = it.email
                             val uid = it.uid
 
@@ -140,28 +140,6 @@ fun AccountContent(mainController: NavController, navController: NavHostControll
                                     )
                                     Text(
                                         uid,
-                                        fontSize = 12.sp
-                                    )
-                                }
-                            }
-
-                            ElevatedCard(
-                                modifier = Modifier.padding(4.dp)
-
-                            ) {
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.SpaceBetween,
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(8.dp)
-                                ) {
-                                    Text(
-                                        "Tên tài khoản:: ",
-                                        fontSize = 12.sp
-                                    )
-                                    Text(
-                                        name,
                                         fontSize = 12.sp
                                     )
                                 }

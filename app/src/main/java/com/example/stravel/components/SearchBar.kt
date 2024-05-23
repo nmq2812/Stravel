@@ -1,5 +1,6 @@
 package com.example.stravel.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -12,8 +13,12 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -29,6 +34,8 @@ import com.example.stravel.ui.theme.CardColor
 @Composable
 fun SearchBar(value: String, onSearch: (String) -> Unit) {
     val keyboardController = LocalSoftwareKeyboardController.current
+    val focusRequester = remember { FocusRequester() }
+    val focusManager = LocalFocusManager.current
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -57,6 +64,7 @@ fun SearchBar(value: String, onSearch: (String) -> Unit) {
             keyboardActions = KeyboardActions(
                 onSearch = {
                     keyboardController?. hide()
+                    focusManager.clearFocus()
                 },
             ),
             colors = OutlinedTextFieldDefaults.colors(
@@ -66,6 +74,10 @@ fun SearchBar(value: String, onSearch: (String) -> Unit) {
             ),
             modifier = Modifier
                 .weight(1f)
+                .focusRequester(focusRequester)
         )
+        Modifier.clickable {
+            focusManager.clearFocus()
+        }
     }
 }

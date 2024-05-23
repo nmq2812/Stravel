@@ -1,6 +1,9 @@
 package com.example.stravel.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -28,6 +31,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.createGraph
 import androidx.navigation.navArgument
+import com.example.stravel.R
 import com.example.stravel.screen.AccountScreen
 import com.example.stravel.screen.DetailScreen
 import com.example.stravel.screen.FavouriteScreen
@@ -37,11 +41,9 @@ import com.example.stravel.screen.Screens
 import com.example.stravel.screen.SettingScreen
 import com.example.stravel.ui.theme.CardColor
 
-lateinit var listOfPlaceItems: MutableList<PlaceItem>
 
 @Composable
-fun AppNavigation(mainController: NavHostController) {
-    listOfPlaceItems = getPlaceItemList()
+fun AppNavigation(mainController: NavHostController, listOfPlaceItems: MutableList<PlaceItem>) {
     val navController = rememberNavController()
     val mainGraph = navController.createGraph(
         startDestination = Screens.HomeScreen.name, // ID của điểm đến bắt đầu
@@ -73,72 +75,92 @@ fun AppNavigation(mainController: NavHostController) {
             DetailScreen(navController, it, listOfPlaceItems)
         }
     }
-    Scaffold (
-        containerColor = Color.Transparent,
-        modifier = Modifier
-            .background(color = Color.Transparent)
-            .padding(8.dp),
-        bottomBar = {
-            val mainColor = CardColor
-            ElevatedCard(
-                elevation = CardDefaults.cardElevation(
-                    defaultElevation = 16.dp
-                ),
-                modifier = Modifier.clip(RoundedCornerShape(100.dp))
-            ) {
-                NavigationBar(
-                    containerColor = Color.Transparent,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(Color.Transparent)
-                        .padding(bottom = 8.dp, top = 4.dp),
-                    content = {
-                        val navBackStackEntry by navController.currentBackStackEntryAsState()
-                        val currentDestination = navBackStackEntry?.destination
-                        listOfNavItems.forEach {navItem ->
-                            val condition = currentDestination?.hierarchy?.any {it.route == navItem.route} == true
-                            NavigationBarItem(
-                                modifier = Modifier.background(Color.Transparent),
-                                selected = condition,
-                                colors = NavigationBarItemColors(
-                                    selectedIconColor = mainColor,
-                                    selectedTextColor = Color.Transparent,
-                                    disabledIconColor = mainColor,
-                                    disabledTextColor = Color.Transparent,
-                                    unselectedIconColor = Color.Gray,
-                                    unselectedTextColor = Color.Transparent,
-                                    selectedIndicatorColor = Color.Transparent,
-                                ),
-                                onClick = {
-                                    navController.navigate(navItem.route) {
-                                        popUpTo(navController.graph.findStartDestination().id) {
-                                            saveState = false
-                                        }
-                                        launchSingleTop = true
-                                        restoreState = true
-                                    }
-                                },
-                                icon = {
-                                    if (condition) {
-                                        Icon(painter = painterResource(id = navItem.iconSelected), contentDescription = null, tint = mainColor)
-                                    } else {
-                                        Icon(painter = painterResource(id = navItem.iconNotSelected), contentDescription = null)
-                                    }
-                                }
-                            )
-                        }
-                    }
-                )
-            }
 
-        }
-    ) { paddingValues ->
-        NavHost(
-            navController = navController,
-            graph = mainGraph,
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.bg),
+            contentDescription = null,
             modifier = Modifier
-                .padding(paddingValues)
+                .fillMaxSize()
+                .padding(8.dp),
         )
+        Scaffold(
+            containerColor = Color.Transparent,
+            modifier = Modifier
+                .background(color = Color.Transparent)
+                .padding(8.dp),
+            bottomBar = {
+                val mainColor = CardColor
+                ElevatedCard(
+                    elevation = CardDefaults.cardElevation(
+                        defaultElevation = 16.dp
+                    ),
+                    modifier = Modifier.clip(RoundedCornerShape(100.dp))
+                ) {
+                    NavigationBar(
+                        containerColor = Color.Transparent,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(Color.Transparent)
+                            .padding(bottom = 8.dp, top = 4.dp),
+                        content = {
+                            val navBackStackEntry by navController.currentBackStackEntryAsState()
+                            val currentDestination = navBackStackEntry?.destination
+                            listOfNavItems.forEach { navItem ->
+                                val condition =
+                                    currentDestination?.hierarchy?.any { it.route == navItem.route } == true
+                                NavigationBarItem(
+                                    modifier = Modifier.background(Color.Transparent),
+                                    selected = condition,
+                                    colors = NavigationBarItemColors(
+                                        selectedIconColor = mainColor,
+                                        selectedTextColor = Color.Transparent,
+                                        disabledIconColor = mainColor,
+                                        disabledTextColor = Color.Transparent,
+                                        unselectedIconColor = Color.Gray,
+                                        unselectedTextColor = Color.Transparent,
+                                        selectedIndicatorColor = Color.Transparent,
+                                    ),
+                                    onClick = {
+                                        navController.navigate(navItem.route) {
+                                            popUpTo(navController.graph.findStartDestination().id) {
+                                                saveState = false
+                                            }
+                                            launchSingleTop = true
+                                            restoreState = true
+                                        }
+                                    },
+                                    icon = {
+                                        if (condition) {
+                                            Icon(
+                                                painter = painterResource(id = navItem.iconSelected),
+                                                contentDescription = null,
+                                                tint = mainColor
+                                            )
+                                        } else {
+                                            Icon(
+                                                painter = painterResource(id = navItem.iconNotSelected),
+                                                contentDescription = null
+                                            )
+                                        }
+                                    }
+                                )
+                            }
+                        }
+                    )
+                }
+
+            }
+        ) { paddingValues ->
+            NavHost(
+                navController = navController,
+                graph = mainGraph,
+                modifier = Modifier
+                    .padding(paddingValues)
+            )
+        }
     }
 }
 

@@ -8,9 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.Button
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -95,51 +92,5 @@ fun SettingsList() {
             steps = 9,
             modifier = Modifier.padding(horizontal = 16.dp)
         )
-
-        Text(
-            text = "Advanced Settings:",
-            modifier = Modifier.padding(16.dp)
-        )
-
-        Switch(
-            checked = crashReportingEnabled,
-            onCheckedChange = { crashReportingEnabled = it },
-            modifier = Modifier.padding(horizontal = 16.dp)
-        )
-
-        Text(
-            text = "Theme",
-            modifier = Modifier.padding(horizontal = 16.dp)
-        )
-
-        Button(
-            onClick = { themeExpanded = true },
-            modifier = Modifier.padding(horizontal = 8.dp)
-        ) {
-            Text(text = "light/dark theme")
-        }
-
-        DropdownMenu(
-            expanded = themeExpanded,
-            onDismissRequest = { themeExpanded = false }
-        ) {
-            DropdownMenuItem(
-                onClick = {
-                    themeExpanded = false
-                },
-                text = {
-                    Text(text = "Light")
-                }
-            )
-
-            DropdownMenuItem(
-                onClick = {
-                    themeExpanded = false
-                },
-                text = {
-                    Text(text = "Dark")
-                }
-            )
-        }
     }
 }
