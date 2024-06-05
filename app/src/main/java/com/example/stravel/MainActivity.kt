@@ -27,6 +27,10 @@ class MainActivity : ComponentActivity() {
     private val userViewModel by viewModels<UserViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // dòng lệnh tràn viền (tràn xuống thanh điều hướng và lên trên thanh thông báo)
+        //enableEdgeToEdge()
+        
         setContent {
             StravelTheme {
                 Greeting(mainViewModel, userViewModel)
