@@ -1,5 +1,6 @@
 package com.example.stravel.screen
 
+import android.content.res.Configuration
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -29,14 +30,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.stravel.components.GridItem
-import com.example.stravel.components.PlaceItem
 import com.example.stravel.components.SearchBar
+import com.example.stravel.model.PlaceItem
 import com.example.stravel.ui.theme.CardColor
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -48,6 +50,13 @@ import com.google.firebase.ktx.Firebase
 @Composable
 fun HomeScreen(navController: NavHostController, listOfPlaceItems: MutableList<PlaceItem>) {
     var searchBarValue by remember { mutableStateOf("") }
+    val configuration = LocalConfiguration.current
+    val orientation = when (configuration.orientation) {
+        Configuration.ORIENTATION_LANDSCAPE -> "Landscape"
+        Configuration.ORIENTATION_PORTRAIT -> "Portrait"
+        else -> "Undefined"
+    }
+
     listOfPlaceItems.distinctBy { it.name }
     Box(modifier = Modifier
         .fillMaxSize(),
@@ -102,6 +111,7 @@ fun HomeContent(
     searchValue: String,
     listOfPlaceItems: MutableList<PlaceItem>
 ) {
+
     var pItems by remember {
         mutableStateOf(listOfPlaceItems)
     }

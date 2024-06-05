@@ -17,6 +17,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
+import com.example.stravel.model.PlaceItem
 
 @Composable
 fun GridItem(it: PlaceItem, navController: NavHostController) {

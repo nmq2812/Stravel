@@ -40,6 +40,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -50,22 +51,27 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.stravel.R
 import com.example.stravel.ui.theme.CardColor
+import com.example.stravel.viewmodel.UserViewModel
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 
 @Composable
-fun LoginScreen(mainController: NavHostController, auth: FirebaseAuth) {
+fun LoginScreen(mainController: NavHostController, auth: FirebaseAuth, userViewModel: UserViewModel) {
     Box(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        LoginContent(mainController, auth)
+        LoginContent(mainController, auth, userViewModel)
     }
 }
 
 @Composable
 fun LoginContent(
     mainController: NavHostController,
-    auth: FirebaseAuth
+    auth: FirebaseAuth,
+    userViewModel: UserViewModel
 ) {
     var emailValue by remember{ mutableStateOf("") }
     var passwordValue by remember{ mutableStateOf("") }
@@ -79,7 +85,8 @@ fun LoginContent(
     var showDialog by remember {
         mutableStateOf(false)
     }
-
+    val database = Firebase.database.getReference("Accounts")
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     Box(
         modifier = Modifier
@@ -241,6 +248,11 @@ fun LoginContent(
                                 Toast.LENGTH_SHORT)
                             toast.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 0, 0)
                             toast.show()
+                            val user = userViewModel.userAccounts.find { it.email == emailValue }
+                            if (user!!.id == "") {
+                                user.id = Firebase.auth.currentUser!!.uid
+                                database.child(user.userName).child("id").setValue(user.id)
+                            }
                             mainController.navigateUp()
                         } else {
                             val toast = Toast.makeText(context,
@@ -252,15 +264,10 @@ fun LoginContent(
                             passwordValue = ""
                         }
                     }
+                    keyboardController?.hide()
                 },
                 enabled = emailValue != "" && passwordValue != "",
                 shape = customShape,
-//                colors = ButtonColors(
-//                    containerColor = CardColor,
-//                    contentColor = Color.White,
-//                    disabledContainerColor = CardColor,
-//                    disabledContentColor = CardColor
-//                ),
                 modifier = Modifier.fillMaxWidth(0.7f)
             ) {
                 Text("Login")

@@ -38,7 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.example.stravel.components.GridItem
-import com.example.stravel.components.PlaceItem
+import com.example.stravel.model.PlaceItem
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 

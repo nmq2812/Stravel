@@ -19,6 +19,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material.icons.rounded.Email
 import androidx.compose.material.icons.rounded.Lock
 import androidx.compose.material3.Button
@@ -48,24 +49,34 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.stravel.R
+import com.example.stravel.model.Account
 import com.example.stravel.ui.theme.CardColor
+import com.example.stravel.viewmodel.UserViewModel
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 
 @Composable
-fun RegisterScreen(mainController: NavHostController, auth: FirebaseAuth) {
+fun RegisterScreen(
+    mainController: NavHostController,
+    auth: FirebaseAuth,
+    userViewModel: UserViewModel
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        RegisterContent(mainController, auth)
+        RegisterContent(mainController, auth, userViewModel)
     }
 }
 
 @Composable
 fun RegisterContent(
     mainController: NavHostController,
-    auth: FirebaseAuth
+    auth: FirebaseAuth,
+    userViewModel: UserViewModel
 ) {
+    var nameValue by remember{ mutableStateOf("") }
     var emailValue by remember{ mutableStateOf("") }
     var passwordValue by remember{ mutableStateOf("") }
     var passwordRepeatValue by remember{ mutableStateOf("") }
@@ -77,6 +88,7 @@ fun RegisterContent(
     var isHidePassword by remember {
         mutableStateOf(true)
     }
+    val database = Firebase.database.getReference("Accounts")
 
     Box (
         modifier = Modifier
@@ -106,6 +118,39 @@ fun RegisterContent(
                 fontSize = 36.sp,
                 modifier = Modifier.padding(top = 48.dp, bottom = 24.dp)
             )
+            Spacer(modifier = Modifier.padding(8.dp))
+
+            OutlinedTextField(
+                value = nameValue,
+                onValueChange = { nameValue = it },
+                placeholder = {
+                    Row {
+                        Text("Nhập tên đăng nhập")
+                    }
+                },
+                label = { Text(text = "Tên đăng nhập") },
+                leadingIcon = { Icon(Icons.Rounded.AccountCircle, contentDescription = null, tint = CardColor) },
+                shape = RoundedCornerShape(16.dp),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Email,
+                    imeAction = ImeAction.Next
+                ),
+                keyboardActions = KeyboardActions(
+                    onNext = {
+                        passwordFocusRequester.requestFocus()
+                    }
+                ),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = CardColor,
+                    unfocusedBorderColor = CardColor
+                ),
+                modifier = Modifier
+                    .background(color = Color.Transparent)
+                    .fillMaxWidth(0.7f)
+                    .clip(shape = RoundedCornerShape(16.dp))
+                    .focusRequester(emailFocusRequester),
+            )
+
             Spacer(modifier = Modifier.padding(8.dp))
             OutlinedTextField(
                 value = emailValue,
@@ -302,6 +347,14 @@ fun RegisterContent(
                     } else {
                         auth.createUserWithEmailAndPassword(emailValue, passwordValue).addOnCompleteListener { task ->
                             if (task.isSuccessful) {
+                                val acc = Account(
+                                    email = emailValue,
+                                    password = passwordValue,
+                                    userName = nameValue
+                                )
+                                acc.pushAccount()
+                                userViewModel.addAccount(acc)
+
                                 val toast = Toast.makeText(context,
                                     "Đăng ký thành công!",
                                     Toast.LENGTH_LONG)
@@ -321,7 +374,7 @@ fun RegisterContent(
                         }
                     }
                 },
-                enabled = passwordValue != "" && emailValue != "" && passwordRepeatValue != "",
+                enabled = nameValue != "" && passwordValue != "" && emailValue != "" && passwordRepeatValue != "",
                 shape = customShape,
                 modifier = Modifier.fillMaxWidth(0.7f)
             ) {

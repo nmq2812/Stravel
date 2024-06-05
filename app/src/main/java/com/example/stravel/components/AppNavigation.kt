@@ -32,6 +32,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.createGraph
 import androidx.navigation.navArgument
 import com.example.stravel.R
+import com.example.stravel.model.Account
+import com.example.stravel.model.PlaceItem
 import com.example.stravel.screen.AccountScreen
 import com.example.stravel.screen.DetailScreen
 import com.example.stravel.screen.FavouriteScreen
@@ -43,7 +45,11 @@ import com.example.stravel.ui.theme.CardColor
 
 
 @Composable
-fun AppNavigation(mainController: NavHostController, listOfPlaceItems: MutableList<PlaceItem>) {
+fun AppNavigation(
+    mainController: NavHostController,
+    listOfPlaceItems: MutableList<PlaceItem>,
+    listOfAccounts: MutableList<Account>
+) {
     val navController = rememberNavController()
     val mainGraph = navController.createGraph(
         startDestination = Screens.HomeScreen.name, // ID của điểm đến bắt đầu
@@ -52,7 +58,7 @@ fun AppNavigation(mainController: NavHostController, listOfPlaceItems: MutableLi
         composable(Screens.HomeScreen.name) { HomeScreen(navController, listOfPlaceItems) }
         composable(Screens.FavouriteScreen.name) { FavouriteScreen(navController, listOfPlaceItems) }
         composable(Screens.SettingScreen.name) { SettingScreen(navController) }
-        composable(Screens.AccountScreen.name) { AccountScreen(mainController, navController) }
+        composable(Screens.AccountScreen.name) { AccountScreen(mainController, navController, listOfAccounts) }
 
         composable(
             route = Screens.PaymentScreen.name + "/{placeId}",

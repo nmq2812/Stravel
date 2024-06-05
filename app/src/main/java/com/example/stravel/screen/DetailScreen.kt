@@ -65,7 +65,7 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.example.stravel.R
-import com.example.stravel.components.PlaceItem
+import com.example.stravel.model.PlaceItem
 import com.example.stravel.ui.theme.CardColor
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot

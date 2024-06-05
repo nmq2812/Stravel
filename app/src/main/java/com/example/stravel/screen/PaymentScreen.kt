@@ -58,7 +58,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
-import com.example.stravel.components.PlaceItem
+import com.example.stravel.model.PlaceItem
 import com.example.stravel.ui.theme.CardColor
 
 @OptIn(ExperimentalMaterial3Api::class)

@@ -1,4 +1,4 @@
-package com.example.stravel.components
+package com.example.stravel.model
 
 import androidx.compose.runtime.Composable
 import com.google.firebase.database.DataSnapshot

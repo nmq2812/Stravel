@@ -89,4 +89,7 @@ dependencies {
     testImplementation("io.mockk:mockk:1.13.10")
     implementation("androidx.preference:preference-ktx:1.2.0")
     implementation("androidx.compose.material3:material3:1.3.0-alpha06")
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0")
+
+
 }
